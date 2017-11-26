@@ -39,6 +39,7 @@ class Posts extends DBModel
 	public  $fuel_system;
 	public  $fuel_consumer;	
 	public  $total_view;
+	public  $m_provin_id;
     public function initialize()
     {
         $this->setSource("posts");
@@ -59,29 +60,30 @@ class Posts extends DBModel
 	}
 	public function get_post_row($id){
 		$sql = "select p.post_id,p.post_name,p.post_no,
-				  p.ctg_id,
-				  p.m_type_id,
+				  p.make_id,
+				  p.model_id,
 				  p.status,
-				  p.m_provin_id,
-				  p.m_district_id,
-				  p.m_ward_id,
+				  p.m_provin_id,				
 				  (trim(p.price)+0) price,
-				  p.unit_price,
-				  (trim(p.acreage)+0) acreage,
-				  p.address,
+				  p.unit_price,					
 				  p.content,  
 				  p.del_flg,
-				  p.toilet_num,
-				  p.room_num,
-				  p.floor_num,
-				  p.street_width,
-				  p.facade_width,
-				  p.m_directional_id,
-				  p.map_lat,
-				  p.map_lng,
-				  p.furniture,
-				  p.youtube_url,
-				  p.huong_bancong,
+				  p.num_doors,
+				  p.num_seats,
+				  p.mileage,
+				  p.fuel_system,
+				  p.fuel_consumer,
+				  p.submodel,
+				  p.car_year,
+				  p.from_type,
+				  p.car_status,
+				  p.mileage,
+				  p.body_style_id,
+				  p.interior_color_id,
+				  p.exterior_color_id,
+				  p.fueltype_id,
+				  p.drivetrain,
+				  p.transmission_id,
 				 v.post_level,				
 				 DATE_FORMAT(v.end_date ,'%d/%m/%Y')  end_date,
 				 DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date,	
@@ -91,10 +93,12 @@ class Posts extends DBModel
 				c.address contract_address,
 				c.phone,
 				c.mobie,
-				c.email
+				c.email,
+				pm.*
 				from posts p
 				INNER JOIN posts_view v on v.post_id = p.post_id
 				INNER JOIN posts_contract c on c.post_id = p.post_id
+				left join posts_more pm on pm.post_id = p.post_id
 				where p.post_id = :post_id
 				and v.hide_flg = 0";
 		return $this->query_first($sql,array('post_id'=>$id));
@@ -104,177 +108,144 @@ class Posts extends DBModel
 		//PhoLog::debug_var('update----','param');
 		//PhoLog::debug_var('update----',$param);
 		try {
-	    $this->post_no = $param['post_no'];
-	    $this->post_name   = $param['post_name'];
-	    $this->ctg_id  = $param['ctg_id'];
-	    $this->m_type_id   = $param['m_type_id'];
-	    $this->status  = 0;
-	    $this->m_provin_id = $param['m_provin_id'];
-	    $this->m_district_id   = $param['m_district_id'];   
-	    $this->content = $param['content'];
-	    $this->address    = $param['address'];
-	    $this->address_ascii    = $param['address_ascii'];
-	    $this->add_user    = $param['user_id'];	    
-	    $this->upd_user    = $param['user_id'];
-	    $this->del_flg = 0;
+			$this->post_no = $param['post_no'];
+		    $this->post_name   = $param['post_name'];
+			$this->model_id= $param['model_id'];
+			$this->make_id= $param['make_id'];
+			$this->status = 0;
+			$this->submodel = $param['submodel'];
+			$this->car_year = $param['car_year'];
+			$this->from_type = $param['from_type'];
+			$this->car_status = $param['car_status'];
+			$this->mileage = $param['mileage'];
+			$this->body_style_id = $param['body_style_id'];
+			$this->price = $param['price'];
+			$this->unit_price = $param['unit_price'][0];
+			$this->exterior_color_id = $param['exterior_color_id'];
+			$this->interior_color_id = $param['interior_color_id'];
+			
+			$this->content = $param['content'];		
+			$this->add_user = $param['user_id'];		
+			$this->upd_user = $param['user_id'];
+			$this->del_flg = 0;
+			$this->num_doors = $param['num_doors'];
+			$this->num_seats = $param['num_seats'];
+			$this->transmission_id = $param['transmission_id'];
+			$this->drivetrain = $param['drivetrain'];
+			$this->fueltype_id = $param['fueltype_id'];
+			$this->fuel_system = $param['fuel_system'];
+			$this->fuel_consumer = $param['fuel_consumer'];
+			$this->total_view = 0 ;
+			$this->m_provin_id = $param['m_provin_id'];
+
+
+
 	    
-	    if(strlen($param['unit_price'])>0){
-			$this->unit_price  = $param['unit_price'];
-		}
-		if(strlen($param['price'])>0){
-			$this->price   = $param['price'];
-		}
-		if(strlen($param['m_ward_id'])>0){
-			$this->m_ward_id   = $param['m_ward_id'];
-		}
-	    if(strlen($param['m_directional_id'])>0){
-			$this->m_directional_id    = $param['m_directional_id'];
-		}
-	    if(strlen($param['acreage'])>0){
-			$this->acreage = $param['acreage'];
-		}
-	    if(strlen($param['m_street_id'])>0){
-			$this->m_street_id  = $param['m_street_id'];
-		}
-	    if(strlen($param['toilet_num'])>0){
-			$this->toilet_num  = $param['toilet_num'];
-		}
-		if(strlen($param['room_num'])>0){
-			$this->room_num    = $param['room_num'];
-		}
-		if(strlen($param['floor_num'])>0){
-			$this->floor_num   = $param['floor_num'];
-		}
-		if(strlen($param['street_width'])>0){
-			$this->street_width    = $param['street_width'];
-		}
-	    if(strlen($param['facade_width'])>0){
-			$this->facade_width    = $param['facade_width'];
-		}
-	    if(strlen($param['project_id'])>0){
-			$this->project_id    = $param['project_id'];
-		}
-		if(strlen($param['huong_bancong'])>0){
-			$this->huong_bancong    = $param['huong_bancong'];
-		}
-	    
-	    $this->map_lat = $param['map_lat'];
-	    $this->map_lng = $param['map_lng'];
-	    $this->furniture = $param['furniture'];
-	    $this->youtube_url = $param['youtube_url'];
-	    if(strlen($param['youtube_url'])>0){
-			$this->youtube_key    = $this->extract_youtube_key($param['youtube_url']);
-		}	   
-	    $this->save();
+	    // if(strlen($param['unit_price'])>0){
+			// $this->unit_price  = $param['unit_price'];
+		// }
+		
+	    	    	   
+	    	$this->save();
 	    } catch (\Exception $e) {
-			PhoLog::debug_var('update----',$e);
+			PhoLog::debug_var('update_error----',$e);
 		}
 	    //PhoLog::debug_var('update----','save');
 	    return $this->post_id;
 	}
 	public function _update($param){
 		$sql = "update posts
-					set post_name = :post_name,
-					ctg_id = :ctg_id,
-					post_no = :post_no,
-					m_provin_id = :m_provin_id,
-					m_district_id = :m_district_id,
-					m_ward_id = :m_ward_id,
-					m_street_id =:m_street_id,
-					price = :price,
-					unit_price =:unit_price,
-					acreage = :acreage,
-					content = :content,
-					upd_user = :user_id,
-					toilet_num = :toilet_num,
-					room_num = :room_num,
-					floor_num = :floor_num,
-					street_width = :street_width,
-					facade_width = :facade_width,
-					m_directional_id = :m_directional_id,
-					address =:address,
-					address_ascii =:address_ascii,
-					map_lat = :map_lat ,
-					map_lng = :map_lng,
-					m_type_id =:m_type_id,
-					project_id =:project_id,
-					furniture =:furniture,
-					youtube_url =:youtube_url,
-					youtube_key =:youtube_key,
-					huong_bancong =:huong_bancong,
+					set post_no= :post_no,
+					post_name= :post_name,
+					model_id= :model_id,
+					make_id= :make_id,					
+					submodel= :submodel,
+					car_year= :car_year,
+					from_type= :from_type,
+					car_status= :car_status,
+					mileage= :mileage,
+					body_style_id= :body_style_id,
+					price= :price,
+					unit_price= :unit_price,
+					exterior_color_id= :exterior_color_id,
+					interior_color_id= :interior_color_id,					
+					content= :content,
+					num_doors= :num_doors,
+					num_seats= :num_seats,
+					transmission_id= :transmission_id,
+					drivetrain= :drivetrain,
+					fueltype_id= :fueltype_id,
+					fuel_system= :fuel_system,
+					fuel_consumer= :fuel_consumer,
+					m_provin_id= :m_provin_id,
+					upd_user= :user_id,
 					upd_date =now()
 
 				where post_id =:post_id
 				";
 		$pasql = PHOArray::filter($param, array(
-                    'post_id'
-                    ,'post_name' 
-                    ,'ctg_id'                               
-                    ,'post_no'
-                    ,'user_id'
-                    ,'m_provin_id'
-                    ,'m_type_id'
-                    ,'m_district_id'
-                    ,'m_ward_id'
-                    ,'price'
-                    ,'unit_price'
-                    ,'acreage'
-                    ,'content'
-                    ,'toilet_num'
-                    ,'room_num'
-                    ,'floor_num'
-                    ,'street_width'
-                    ,'m_directional_id'
-                    ,'address'
-                    ,'address_ascii'
-                    ,'facade_width'
-                    ,'map_lat'
-                    ,'map_lng'
-                    ,'project_id'
-                    ,'furniture'
-                    ,'youtube_url'
-                    ,'huong_bancong'
+                    'post_id',
+					'post_no',
+					'post_name',
+					'model_id',
+					'make_id',				
+					'submodel',
+					'car_year',
+					'from_type',
+					'car_status',
+					'mileage',
+					'body_style_id',
+					'price',
+					'unit_price',
+					'exterior_color_id',
+					'interior_color_id',	
+					'content',	
+					'num_doors',
+					'num_seats',
+					'transmission_id',
+					'drivetrain',
+					'fueltype_id',
+					'fuel_system',
+					'fuel_consumer',
+					'm_provin_id',
+					'user_id'
                     ));
-		if(strlen($pasql['unit_price'])==0){
-			$pasql['unit_price'] =NULL;
+		if(strlen($pasql['from_type'])==0){
+			$pasql['from_type'] =NULL;
 		}
-		if(strlen($pasql['price'])==0){
-			$pasql['price']=NULL;
+		if(strlen($pasql['car_status'])==0){
+			$pasql['car_status']=NULL;
 		}
-		if(strlen($pasql['m_ward_id'])==0){
-			$pasql['m_ward_id']=NULL;
+		if(strlen($pasql['mileage'])==0){
+			$pasql['mileage']=NULL;
 		}
-	    if(strlen($pasql['m_directional_id'])==0){
-			$pasql['m_directional_id']=NULL;
+	    if(strlen($pasql['body_style_id'])==0){
+			$pasql['body_style_id']=NULL;
 		}
-	    if(strlen($pasql['acreage'])==0){
-			$pasql['acreage']=NULL;
+	    if(strlen($pasql['exterior_color_id'])==0){
+			$pasql['exterior_color_id']=NULL;
 		}
-	    if(strlen($pasql['m_street_id'])==0){
-			$pasql['m_street_id']=NULL;
+	    if(strlen($pasql['interior_color_id'])==0){
+			$pasql['interior_color_id']=NULL;
 		}
-	    if(strlen($pasql['toilet_num'])==0){
-			$pasql['toilet_num']=NULL;
+	    if(strlen($pasql['num_doors'])==0){
+			$pasql['num_doors']=NULL;
 		}
-		if(strlen($pasql['room_num'])==0){
-			$pasql['room_num']=NULL;
+		if(strlen($pasql['num_seats'])==0){
+			$pasql['num_seats']=NULL;
 		}
-		if(strlen($pasql['floor_num'])==0){
-			$pasql['floor_num']=NULL;
+		if(strlen($pasql['transmission_id'])==0){
+			$pasql['transmission_id']=NULL;
 		}
-		if(strlen($pasql['street_width'])==0){
-			$pasql['street_width']=NULL;
+		if(strlen($pasql['drivetrain'])==0){
+			$pasql['drivetrain']=NULL;
 		}
-	    if(strlen($pasql['facade_width'])==0){
-			$pasql['facade_width']=NULL;
+	    if(strlen($pasql['fueltype_id'])==0){
+			$pasql['fueltype_id']=NULL;
 		}
-		if(strlen($pasql['project_id'])==0){
-			$pasql['project_id']=NULL;
+		if(strlen($pasql['fuel_consumer'])==0){
+			$pasql['fuel_consumer']=NULL;
 		}
-		if(strlen($pasql['huong_bancong'])==0){
-			$pasql['huong_bancong']=NULL;
-		}
-		$pasql['youtube_key'] = $this->extract_youtube_key($param['youtube_url']);
 		
 		$this->pho_execute($sql, $pasql);  
         return TRUE;
@@ -286,24 +257,36 @@ class Posts extends DBModel
 		}
 		$sql ="select p.post_id,p.post_name,p.post_no,v.post_level,
 		(trim(p.price)+0) price,
-		(trim(p.acreage)+0) acreage,pro.m_provin_name,dis.m_district_name,
-				NULLIF(un.m_unit_name,'') m_unit_name,
+	pro.m_provin_name,
+				(case p.unit_price when 1 then 'Triệu' else 'USD' end) unit_name,
+				(case p.from_type when 1 then 'nhập khẩu' else 'lắp ráp trong nước' end) from_type,
+				(case p.transmission_id when 1 then 'số tay' when 2 then 'số tự động' else '' end) transmission_name,
+				(case p.car_status when 1 then 'Xe mới' when 2 then 'Xe cũ' else '' end) car_status,
+				
+				lower(cl.m_color_name) color_name,
+				lower(fl.m_fueltype_name) fueltype_name,
+				p.mileage,
+				p.content,
+				p.car_year,
+				pc.full_name,pc.address,
+				pc.mobie,
 				NULLIF(im.img_path,'') img_path,
 				DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date
-				,rd.m_ward_name,p.youtube_key
+	
 				from posts p
 				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id
-				INNER JOIN m_district dis on dis.m_district_id = p.m_district_id
+				
 				INNER JOIN posts_view v on v.post_id = p.post_id
+				INNER JOIN posts_contract pc on pc.post_id = p.post_id
 				LEFT JOIN posts_img im on im.post_id = p.post_id and im.avata_flg = 1
-				LEFT JOIN m_unit un on un.m_unit_id = p.unit_price 
-				LEFT JOIN m_ward rd on rd.m_ward_id = p.m_ward_id
+				LEFT JOIN m_color cl on cl.m_color_id = p.exterior_color_id 
+				LEFT JOIN m_fueltype fl on fl.m_fueltype_id = p.fueltype_id  
 				where p.del_flg = 0
 				and p.status =1
 				and v.hide_flg = 0
 				and v.end_date >= NOW()
 				and v.start_date <= now()
-				$where
+				and v.post_level =1
 				order by v.post_level DESC, DATE_FORMAT(v.start_date ,'%Y%m%d') DESC
 				limit $limit";
 //		PhoLog::debug_var('vip',$sql);
@@ -380,33 +363,36 @@ class Posts extends DBModel
 	}
 	public function get_vpost($post_id){
 		$sql="select p.post_id,p.post_name,p.post_no,
-				  ctg.ctg_name,
-					ctg.ctg_id,
-					ctg.ctg_no,
-				  p.m_type_id,
+				  m.ctg_name make_name,	
+					md.ctg_name model_name,
+				  (case p.unit_price when 1 then 'Triệu' else 'USD' end) unit_name,
+				(case p.from_type when 1 then 'Nhập khẩu' else 'Lắp ráp trong nước' end) from_type,
+				(case p.transmission_id when 1 then 'số tay' when 2 then 'số tự động' else '' end) transmission_name,
+				(case p.car_status when 1 then 'Xe mới' when 2 then 'Xe cũ' else '' end) car_status,
+				inl.m_color_name interior_color_name,
+				(cl.m_color_name) exterior_color_name,
+				(fl.m_fueltype_name) fueltype_name,
+					b.m_body_type_name,
+					dr.m_drivetrain_name,
+				  p.make_id,
+				  p.model_id,
 				  p.status,
-				  mp.m_provin_name,
-				  md.m_district_name,
-				  mw.m_ward_name,
+				  p.m_provin_id,				
 				  (trim(p.price)+0) price,
-				  mu.m_unit_name,
-				  (trim(p.acreage)+0) acreage,
-				  p.address,
+				  p.unit_price,					
 				  p.content,  
 				  p.del_flg,
-				  p.toilet_num,
-				  p.room_num,
-				  p.floor_num,
-				  p.street_width,
-				  p.facade_width,
-				  p.map_lat,
-				  p.map_lng,
-				  p.furniture,
-				  p.youtube_key,
-				  p.m_district_id,
-				  p.m_provin_id,				 
-				  di.m_directional_name,
-				  bc.m_directional_name as huong_bancong,
+				  p.num_doors,
+				  p.num_seats,
+				  p.mileage,
+				  p.fuel_system,
+				  p.fuel_consumer,
+				  p.submodel,
+				  p.car_year,
+				  p.mileage,				 
+				  p.fueltype_id,
+				  p.drivetrain,
+				  p.transmission_id,
 				 v.post_level,				
 				 DATE_FORMAT(v.end_date ,'%d/%m/%Y')  end_date,
 				 DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date,	
@@ -416,21 +402,22 @@ class Posts extends DBModel
 				c.address contract_address,
 				c.phone,
 				c.mobie,
-				c.email
+				c.email,
+				pm.*
 				from posts p
-				INNER JOIN category ctg on ctg.ctg_id = p.ctg_id
 				INNER JOIN posts_view v on v.post_id = p.post_id
 				INNER JOIN posts_contract c on c.post_id = p.post_id
-				INNER JOIN m_provincial mp on mp.m_provin_id = p.m_provin_id
-				INNER JOIN m_district md on md.m_district_id = p.m_district_id
-				LEFT JOIN m_ward mw on mw.m_ward_id = p.m_ward_id
-				LEFT JOIN m_unit mu on mu.m_unit_id = p.unit_price
-				LEFT JOIN m_directional di on di.m_directional_id = p.m_directional_id 
-				LEFT JOIN m_directional bc on bc.m_directional_id = p.huong_bancong 			
-				
-				where p.post_id = :post_id 
+				INNER JOIN category m on m.ctg_id = p.make_id
+				INNER JOIN category md on md.ctg_id = p.model_id	
+				INNER JOIN m_body_type b on b.m_body_type_id=p.body_style_id
+				left join posts_more pm on pm.post_id = p.post_id
+				LEFT JOIN m_color cl on cl.m_color_id = p.exterior_color_id 
+				LEFT JOIN m_color inl on inl.m_color_id = p.interior_color_id 
+				LEFT JOIN m_fueltype fl on fl.m_fueltype_id = p.fueltype_id 
+				LEFT JOIN m_drivetrain dr on dr.m_drivetrain_id =p.drivetrain
+				where p.post_id = :post_id
 				and v.hide_flg = 0
-				and p.del_flg = 0";
+				";
 		return $this->query_first($sql,array('post_id'=>$post_id));
 	}
 	public function search_posts($param,$start_row=0){
@@ -511,27 +498,40 @@ class Posts extends DBModel
 
 			}						
 		}
-		
+		$where ="";
 		$sql="select p.post_id,p.post_name,p.post_no,v.post_level,
-				(trim(p.price)+0) price,
-				(trim(p.acreage)+0) acreage,
-				pro.m_provin_name,dis.m_district_name,
-				NULLIF(un.m_unit_name,'') m_unit_name,
+		(trim(p.price)+0) price,
+	pro.m_provin_name,
+				(case p.unit_price when 1 then 'Triệu' else 'USD' end) unit_name,
+				(case p.from_type when 1 then 'nhập khẩu' else 'lắp ráp trong nước' end) from_type,
+				(case p.transmission_id when 1 then 'số tay' when 2 then 'số tự động' else '' end) transmission_name,
+				(case p.car_status when 1 then 'Xe mới' when 2 then 'Xe cũ' else '' end) car_status,
+				
+				lower(cl.m_color_name) color_name,
+				lower(fl.m_fueltype_name) fueltype_name,
+				p.mileage,
+				p.content,
+				p.car_year,
+				pc.full_name,pc.address,
+				pc.mobie,
 				NULLIF(im.img_path,'') img_path,
 				DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date
-				,rd.m_ward_name,p.youtube_key
+	
 				from posts p
 				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id
-				INNER JOIN m_district dis on dis.m_district_id = p.m_district_id
+				
 				INNER JOIN posts_view v on v.post_id = p.post_id
+				INNER JOIN posts_contract pc on pc.post_id = p.post_id
 				LEFT JOIN posts_img im on im.post_id = p.post_id and im.avata_flg = 1
-				LEFT JOIN m_unit un on un.m_unit_id = p.unit_price 
-				LEFT JOIN m_ward rd on rd.m_ward_id = p.m_ward_id
+				LEFT JOIN m_color cl on cl.m_color_id = p.exterior_color_id 
+				LEFT JOIN m_fueltype fl on fl.m_fueltype_id = p.fueltype_id  
 				where p.del_flg = 0
 				and p.status =1
 				and v.hide_flg = 0
+				and v.end_date >= NOW()
+				and v.start_date <= now()				
 				$where			
-				order by v.post_level DESC, v.start_date DESC			
+				order by v.post_level DESC, DATE_FORMAT(v.start_date ,'%Y%m%d') DESC		
 				limit $limit
 				OFFSET $start_row
 				";
@@ -618,15 +618,12 @@ class Posts extends DBModel
 
 			}						
 		}
-		
+		$where="";
 		$sql="select count(p.post_id) cnt
 				from posts p
-				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id
-				INNER JOIN m_district dis on dis.m_district_id = p.m_district_id
+				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id				
 				INNER JOIN posts_view v on v.post_id = p.post_id
 				LEFT JOIN posts_img im on im.post_id = p.post_id and im.avata_flg = 1
-				LEFT JOIN m_unit un on un.m_unit_id = p.unit_price 
-
 				where p.del_flg = 0
 				and p.status =1
 				and v.hide_flg = 0
@@ -638,15 +635,16 @@ class Posts extends DBModel
 		return $res['cnt'];
 	}
 	public function get_list_byuser($param,$start_row){
-		$sql = "select p.post_id,p.post_name,p.post_no,p.price,p.acreage,pro.m_provin_name,dis.m_district_name,
+		$sql = "select p.post_id,p.post_name,p.post_no,p.price,
+			 pro.m_provin_name,
 				NULLIF(un.m_unit_name,'') m_unit_name,
 				NULLIF(im.img_path,'') img_path,
 				DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date,
-				DATE_FORMAT(v.end_date ,'%d/%m/%Y')  end_date,p.add_user,
+				DATE_FORMAT(v.end_date ,'%d/%m/%Y')  end_date
+				,p.add_user,
 				(case p.`status` when 0 THEN 'Chờ duyệt' when 1 THEN 'đã duyệt' when 2 THEN 'Không duyệt' when 3 THEN 'Đã xóa' end) status,(case when v.end_date < now() then '1' else '0' end ) as end_flg
 				from posts p
-				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id
-				INNER JOIN m_district dis on dis.m_district_id = p.m_district_id
+				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id		
 				INNER JOIN posts_view v on v.post_id = p.post_id
 				LEFT JOIN posts_img im on im.post_id = p.post_id and im.avata_flg = 1
 				LEFT JOIN m_unit un on un.m_unit_id = p.unit_price
@@ -747,13 +745,14 @@ class Posts extends DBModel
 			$del_flg = $param['del_flg'];
 		}
 		$pasql = array();	
-		$sql = "select p.post_id,p.post_name,p.post_no,p.price,p.acreage,
+		$sql = "select p.post_id,p.post_name,p.post_no,p.price,
 			 c.ctg_name,		
 				DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date,
-				DATE_FORMAT(v.end_date ,'%d/%m/%Y')  end_date,p.add_user,
+				DATE_FORMAT(v.end_date ,'%d/%m/%Y')  end_date,
+			  p.add_user,
 				(case p.status when 0 THEN 'Chờ duyệt' when 1 THEN 'đã duyệt' when 2 THEN 'Không duyệt' when 3 THEN 'Đã xóa' end) status_name,p.status
 				from posts p
-				LEFT JOIN category c on c.ctg_id = p.ctg_id
+				LEFT JOIN category c on c.ctg_id = p.make_id
 				INNER JOIN posts_view v on v.post_id = p.post_id and v.hide_flg = 0
 
 				where p.del_flg = $del_flg	";
@@ -811,7 +810,7 @@ class Posts extends DBModel
 		$pasql = array();	
 		$sql = "select count(p.post_id) cnt
 				from posts p
-				LEFT JOIN category c on c.ctg_id = p.ctg_id
+				LEFT JOIN category c on c.ctg_id = p.make_id
 				INNER JOIN posts_view v on v.post_id = p.post_id and v.hide_flg = 0
 
 				where p.del_flg = $del_flg	";
@@ -917,27 +916,39 @@ class Posts extends DBModel
 	public function get_post_relation($param,$limit=10){
 		$sql="select p.post_id,p.post_name,p.post_no,v.post_level,
 		(trim(p.price)+0) price,
-		(trim(p.acreage)+0) acreage,pro.m_provin_name,dis.m_district_name,
-				NULLIF(un.m_unit_name,'') m_unit_name,
+	pro.m_provin_name,
+				(case p.unit_price when 1 then 'Triệu' else 'USD' end) unit_name,
+				(case p.from_type when 1 then 'nhập khẩu' else 'lắp ráp trong nước' end) from_type,
+				(case p.transmission_id when 1 then 'số tay' when 2 then 'số tự động' else '' end) transmission_name,
+				(case p.car_status when 1 then 'Xe mới' when 2 then 'Xe cũ' else '' end) car_status,
+				
+				lower(cl.m_color_name) color_name,
+				lower(fl.m_fueltype_name) fueltype_name,
+				p.mileage,
+				p.content,
+				p.car_year,
+				pc.full_name,pc.address,
+				pc.mobie,
 				NULLIF(im.img_path,'') img_path,
 				DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date
-				,rd.m_ward_name
+	
 				from posts p
 				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id
-				INNER JOIN m_district dis on dis.m_district_id = p.m_district_id
+				
 				INNER JOIN posts_view v on v.post_id = p.post_id
+				INNER JOIN posts_contract pc on pc.post_id = p.post_id
 				LEFT JOIN posts_img im on im.post_id = p.post_id and im.avata_flg = 1
-				LEFT JOIN m_unit un on un.m_unit_id = p.unit_price 
-				LEFT JOIN m_ward rd on rd.m_ward_id = p.m_ward_id
+				LEFT JOIN m_color cl on cl.m_color_id = p.exterior_color_id 
+				LEFT JOIN m_fueltype fl on fl.m_fueltype_id = p.fueltype_id  
 				where p.del_flg = 0
 				and p.status =1
 				and v.hide_flg = 0
 				and v.end_date >= NOW()
-				and p.m_provin_id = :m_provin_id
-				and p.m_type_id = :m_type_id
-				and p.m_district_id = :m_district_id	
-				and p.post_id <> :post_id	
-				order by v.post_level DESC, v.start_date DESC
+				and v.start_date <= now()
+				and v.post_level =1
+				and p.make_id = :make_id
+				and p.post_id <> :post_id
+				order by v.post_level DESC, DATE_FORMAT(v.start_date ,'%Y%m%d') DESC
 				limit $limit";
 		return $this->pho_query($sql,$param);
 	}

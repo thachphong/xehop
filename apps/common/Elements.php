@@ -560,4 +560,11 @@ class Elements extends Component
 		}
 		return "";
 	}
+	public function substr_des($str){
+		 $find = strrpos(substr($str,0,105), " ");
+		 if($find > 0){
+		 	return substr($str,0,$find);
+		 }
+		 return $str;		 
+	}
 }

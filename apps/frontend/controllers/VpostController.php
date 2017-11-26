@@ -49,22 +49,22 @@ class VpostController extends PHOController
 			$traffic['ip'] = $this->get_client_ip_server();
 			$traffic['post_id'] =$id;
 			//PhoLog::debug_var('view----',__LINE__);
-			$db->update_traffic($traffic);
+			//$db->update_traffic($traffic);
 			
 			//$this->set_template_share();
-			$rel['m_type_id'] = $result['m_type_id'];
-			$rel['m_provin_id'] = $result['m_provin_id'];
-			$rel['m_district_id'] = $result['m_district_id'];
+			//$rel['m_type_id'] = $result['m_type_id'];
+			$rel['make_id'] = $result['make_id'];
+			//$rel['m_district_id'] = $result['m_district_id'];
 			$rel['post_id'] = $result['post_id'];
 			PhoLog::debug_var('view----',$rel);
 			$result['relations']= $db->get_post_relation($rel);
 			
-			$result['type'] = $result['m_type_id'];
-			$param['type'] = $result['m_type_id'];
-			$param['ctgid'] = $result['ctg_id'];
+			//$result['type'] = $result['m_type_id'];
+			//$param['type'] = $result['m_type_id'];
+			//$param['ctgid'] = $result['ctg_id'];
 			$param['provin'] = $result['m_provin_id'];
-			$param['district'] = $result['m_district_id'];					      
-	        $result['dstlist'] = $db->get_bydistrict($param);
+			//$param['district'] = $result['m_district_id'];					      
+	        //$result['dstlist'] = $db->get_bydistrict($param);
 	        
 			$this->ViewVAR($result);	
 		} catch (\Exception $e) {

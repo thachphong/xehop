@@ -60,6 +60,20 @@
 							</div>
 						</div>
 						<div class="row row-margin-bottom">
+							<label class="col-md-3 col-sm-3 col-xs-12 title_col">Tỉnh/TP <span class="lab_red">(*)</span>:</label></label>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								<label class="select_icon">
+								<select name="city" id="city" required>
+									<option value="">-- Chọn tỉnh/TP--</option>	
+									{%for item in provin_list%}
+										<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>	
+									{%endfor%}
+								</select>
+								</label>
+								<label class="lab_red lab_invisible" id="city_error">Bạn cần chọn tỉnh/TP !</label>
+							</div>
+						</div>
+						<div class="row row-margin-bottom">
 							<label class="col-md-3 col-sm-3 col-xs-12 title_col">Địa chỉ :</label>
 							<div class="col-md-8 col-sm-8 col-xs-12">
 								<input type="text" name="address"  value="" >
@@ -136,7 +150,14 @@
         			$('#'+ $(this).attr('id') + "_error").hide();
         		}
         	});
-        	       	
+        	$('select:required').each(function(key,item){
+        		if($(this).val().trim().length == 0){
+        			$('#'+ $(this).attr('id') + "_error").show();
+        			flg = false;        			
+        		}else{
+        			$('#'+ $(this).attr('id') + "_error").hide();
+        		}
+        	});       	
         	// if(!flg){
         	// 	$('#lab_message_error').show();
         	// }else{

@@ -55,7 +55,7 @@
             </div>
          </div>
       </div>
-      <div class="row">
+      <!--<div class="row">
       	<div class="container">
       		<div id="cfacebook" style="float: right;">
             <a href="javascript:;" class="chat_fb" onclick="return:false;"><i class="fa fa-facebook-square"></i> Hỗ trợ trực tuyến</a>
@@ -65,8 +65,8 @@
           </div>
       	</div>
       </div>
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
+<div id="fb-root"></div>-->
+<!--<script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
@@ -87,5 +87,5 @@
 jQuery('.fchat').toggle('slow');
   });
   });
-  </script>
+  </script>-->
 {{ javascript_include('template1/js/menu_active.js?ver=1.0.5') }}

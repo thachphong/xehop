@@ -52,6 +52,8 @@
 						<input type="hidden" name="folder_tmp" id="folder_tmp"  value="{{folder_tmp}}">
 						<input type="hidden" name="post_id" id="post_id"  value="{{post_id}}">
 						<input type="hidden" name="post_contract_id" value="{{post_contract_id}}">
+						<input type="hidden" name="post_name" id="post_name"  value="{{post_name}}">
+						<input type="hidden" name="posts_more_id" value="{{posts_more_id}}">
 					<div class="row">
 					<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left" style="border-right: 1px solid var(--color_panel)">	
 						<div>
@@ -68,7 +70,7 @@
 									<select name="make_id" id="make_id" required>
 										<option value="">--Chọn hãng--</option>
 										{%for item in category_1%}
-											<option value="{{item.ctg_id}}">{{item.ctg_name}}</option>
+											<option value="{{item.ctg_id}}" {%if make_id==item.ctg_id%}selected{%endif%}>{{item.ctg_name}}</option>
 										{%endfor%}
 									</select>
 								</label>
@@ -89,7 +91,7 @@
 						<div class="row row-margin-bottom">
 							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Phân hạng đời xe</label> 
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
-								<input type="text" name="submodel" class="" id="submodel">
+								<input type="text" maxlength="20" name="submodel" value="{{submodel}}" id="submodel">
 							</div>
 						</div>
 						<div class="row row-margin-bottom">
@@ -100,9 +102,9 @@
 										<option value="">--Chọn năm sx--</option>
 										{%for item in current_year..1989%}
 											{%if item==1989%}
-												<option value="{{item}}">Trước 1990</option>
+												<option value="{{item}}" {%if car_year=='1989'%}selected{%endif%}>Trước 1990</option>
 											{%else%}
-												<option value="{{item}}">{{item}}</option>
+												<option value="{{item}}" {%if car_year==item%}selected{%endif%}>{{item}}</option>
 											{%endif%}
 										{%endfor%}
 									</select>
@@ -116,8 +118,8 @@
 								<label class="select_icon">
 									<select name="from_type" id="from_type" required>
 										<option value="">--Chọn xuất xứ--</option>
-										<option value="1">Nhập khẩu</option>
-										<option value="2">Lắp ráp trong nước</option>
+										<option value="1" {%if from_type=='1'%}selected{%endif%}>Nhập khẩu</option>
+										<option value="2" {%if from_type=='2'%}selected{%endif%}>Lắp ráp trong nước</option>
 									</select>
 								</label>
 								<label class="lab_red lab_invisible" id="from_type_error">Bạn cần chọn xuất xứ !</label>
@@ -129,17 +131,17 @@
 								<label class="select_icon">
 									<select name="car_status" id="car_status" required>
 										<option value="">--Chọn--</option>
-										<option value="1">Xe mới</option>
-										<option value="2">Xe đã dùng</option>
+										<option value="1" {%if car_status=='1'%}selected{%endif%}>Xe mới</option>
+										<option value="2" {%if car_status=='2'%}selected{%endif%}>Xe đã dùng</option>
 									</select>
 								</label>
 								<label class="lab_red lab_invisible" id="car_status_error">Bạn cần chọn tình trạng !</label>
 							</div>
 						</div>
-						<div class="row row-margin-bottom">
+						<div class="row row-margin-bottom" id="div_mileage">
 							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Số Km đã đi<span class="lab_red">(*)</span>:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
-								<input type="text" name="mileage" required value="{{post_name}}" id="mileage">
+								<input type="text" class="number_format" name="mileage" required value="{{mileage}}" id="mileage">
 								<label class="lab_red lab_invisible" id="mileage_error">Bạn cần nhập số km đã đi !</label>
 							</div>
 						</div>
@@ -148,16 +150,10 @@
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
 								<label class="select_icon">
 									<select name="body_style_id" id="body_style_id" required>
-										<option value="">--Chọn--</option>
-										<option value="1">Sedan</option>
-										<option value="2">SUV</option>									
-										<option value="3">Coupe</option>
-										<option value="4">Crossover</option>								
-										<option value="5">Hatchback</option>
-										<option value="6">Convertible/Cabriolet</option>
-										<option value="7">Truck</option>
-										<option value="8">Van/Minivan</option>										
-										<option value="9">Wagon</option>
+										<option value="">--Chọn--</option>										
+										{%for item in bodytype_list%}
+											<option value="{{item.m_body_type_id}}" {%if body_style_id==item.m_body_type_id%}selected{%endif%}>{{item.m_body_type_name}}</option>
+										{%endfor%}
 									</select>
 								</label>
 								<label class="lab_red lab_invisible" id="body_style_id_error">Bạn cần chọn dòng xe !</label>
@@ -166,76 +162,50 @@
 						<div class="row row-margin-bottom">
 							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Giá tiền<span class="lab_red">(*)</span>:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
-								<input type="text" name="price" id="price">
-								<label>Triệu đồng<input type="checkbox" name=""></label>
-								<label>USD<input type="checkbox" name=""></label>
+								<input type="text" class="number_format" name="price" id="price" value="{{price}}" style="width:58%">
+								<div class="donvi_tinh">
+									<label><input type="radio" name="unit_price[]" value="1" {%if unit_price==1%}checked{%endif%} style="width: 20px;">Triệu đồng</label>
+									<label><input type="radio" name="unit_price[]" value="2" {%if unit_price==2%}checked{%endif%} style="width: 20px;">USD</label>
+								</div>
 								<label class="lab_red lab_invisible" id="price_error">Bạn cần nhập giá tiền !</label>
 							</div>
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Ngoại thât<span class="lab_red">(*)</span>:</label>
+							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Ngoại thât:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding" >
 								<label class="select_icon">
 									<select name="exterior_color_id" id="exterior_color_id">
 										<option value="">Chọn màu xe</option>
-										<option value="1">Bạc</option> 
-										<option value="2">Cát</option> 
-										<option value="3">Ghi</option> 										
-										<option value="4">Hồng</option> 		
-										<option value="5">Kem</option> 									
-										<option value="6">Nâu</option> 									
-										<option value="7">Tím</option> 
-										<option value="8">Trắng</option> 
-										<option value="9">Vàng</option> 
-										<option value="10">Cam</option> 
-										<option value="11">Xanh</option> 
-										<option value="12">Xám</option> 
-										<option value="13">Đỏ</option> 
-										<option value="14">Đồng</option> 
-										<option value="15">Đen</option> 
-										<option value="99">Nhiều màu</option> 
-										<option value="100">Màu khác</option>
+										{%for item in color_list%}
+											<option value="{{item.m_color_id}}" {%if exterior_color_id==item.m_color_id%}selected{%endif%}>{{item.m_color_name}}</option>
+										{%endfor%}
 									</select>
 								</label>
 							</div>
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Nội thất<span class="lab_red">(*)</span>:</label>
+							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Nội thất:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
 								<label class="select_icon">
 									<select name="interior_color_id" id="interior_color_id">
 										<option value="">--Chọn màu nội thất--</option>									
-										<option value="1">Bạc</option> 
-										<option value="2">Cát</option> 
-										<option value="3">Ghi</option> 										
-										<option value="4">Hồng</option> 		
-										<option value="5">Kem</option> 									
-										<option value="6">Nâu</option> 									
-										<option value="7">Tím</option> 
-										<option value="8">Trắng</option> 
-										<option value="9">Vàng</option> 
-										<option value="10">Cam</option> 
-										<option value="11">Xanh</option> 
-										<option value="12">Xám</option> 
-										<option value="13">Đỏ</option> 
-										<option value="14">Đồng</option> 
-										<option value="15">Đen</option> 
-										<option value="99">Nhiều màu</option> 
-										<option value="100">Màu khác</option>
+										{%for item in color_list%}
+											<option value="{{item.m_color_id}}" {%if interior_color_id==item.m_color_id%}selected{%endif%}>{{item.m_color_name}}</option>
+										{%endfor%}
 									</select>
 								</label>
 							</div>
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Số cửa<span class="lab_red">(*)</span>:</label>
+							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Số cửa:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">								
-								<input name="num_doors" id="num_doors">
+								<input name="num_doors" class="number_format" id="num_doors" value="{{num_doors}}">
 							</div>
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Số chỗ ngồi<span class="lab_red">(*)</span>:</label>
+							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Số chỗ ngồi:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
-								<input name="num_seats" id="num_seats">
+								<input name="num_seats" class="number_format" id="num_seats" value="{{num_seats}}">
 							</div>
 						</div>
 					</div>
@@ -244,27 +214,26 @@
 							<h3>Hộp số chuyển động</h3>
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-6 col-sm-6 col-xs-12 title_col">Hộp số <span class="lab_red">(*)</span>:</label>
-							<div class="col-md-6 col-sm-6 col-xs-12 no_padding">
+							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Hộp số:</label>
+							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
 								<label class="select_icon">
 									<select name="transmission_id" id="transmission_id">
 										<option value="">--Chọn--</option>										
-										<option value="1">Số tay</option> 
-										<option value="2">tự động</option> 										
+										<option value="1" {%if transmission_id=="1"%}selected{%endif%}>Số tay</option> 
+										<option value="2" {%if transmission_id=="2"%}selected{%endif%}>tự động</option> 										
 									</select>
 								</label>
 							</div>												
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-6 col-sm-6 col-xs-12 title_col">dẫn động <span class="lab_red">(*)</span>:</label>
-							<div class="col-md-6 col-sm-6 col-xs-12 no_padding">
+							<label class="col-md-5 col-sm-5 col-xs-12 title_col">dẫn động:</label>
+							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
 								<label class="select_icon">
 								<select name="drivetrain" id="drivetrain">
 									<option value="">-- Chọn --</option>
-									<option value="1">FWD - Dẫn động cầu trước</option>
-									<option value="2">RWD - Dẫn động cầu sau</option>										
-									<option value="3">4WD - Dẫn động 4 bánh</option>
-									<option value="4">AWD - 4 bánh toàn thời gian</option>
+									{%for item in drivetrain_list%}
+										<option value="{{item.m_drivetrain_id}}" {%if drivetrain==item.m_drivetrain_id%}selected{%endif%}>{{item.m_drivetrain_name}}</option>
+									{%endfor%}									
 								</select>
 								</label>
 							</div>												
@@ -274,16 +243,14 @@
 							<h3>Nhiên liệu</h3>
 						</div>
 						<div class="row row-margin-bottom">
-							<label class="col-md-6 col-sm-6 col-xs-12 title_col">Nhiên liệu <span class="lab_red">(*)</span>:</label>
+							<label class="col-md-6 col-sm-6 col-xs-12 title_col">Nhiên liệu:</label>
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding">							
 								<label class="select_icon">
 								<select name="fueltype_id" id="fueltype_id">
 									<option value="">- Chọn -</option>
-									<option value="1">Xăng</option>
-									<option value="2">Diesel</option>
-									<option value="3">Hybrid</option>
-									<option value="4">Điện</option>
-									<option value="9">Loại khác</option>
+									{%for item in fueltype_list%}
+										<option value="{{item.m_fueltype_id}}" {%if fueltype_id==item.m_fueltype_id%}selected{%endif%}>{{item.m_fueltype_name}}</option>
+									{%endfor%}
 								</select>
 								</label>								
 							</div>												
@@ -291,13 +258,14 @@
 						<div class="row row-margin-bottom">
 							<label class="col-md-6 col-sm-6 col-xs-12 title_col">Hệ thống nạp nhiên liệu:</label>
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding">
-								<input type="text" name="fuel_system" required value="{{fuel_system}}" id="fuel_system">
+								<input type="text" maxlength="50" name="fuel_system" value="{{fuel_system}}" id="fuel_system">
 							</div>												
 						</div>
 						<div class="row row-margin-bottom">
 							<label class="col-md-6 col-sm-6 col-xs-12 title_col">Mức tiêu thụ nhiên liệu: </label>
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding">
-								<input type="text" name="fuel_consumer" required value="{{fuel_consumer}}" id="fuel_consumer">
+								<input type="text" class="number_format" name="fuel_consumer" value="{{fuel_consumer}}" id="fuel_consumer" style="width:66%">
+								<span>L/100Km </span>
 							</div>												
 						</div>
 						<hr />
@@ -318,92 +286,112 @@
 						<div class="row">
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left border_right">
 								<h3>Túi khí an toàn</h3>
+								{%if air_bag|length >0 %}
+									{% set arr = air_bag|json_decode %}
+								{%else%}
+									{% set arr ={} %}
+								{%endif%}
 								<div class="row">
 									<label class="col-md-10 col-sm-10 col-xs-2 title_col">Túi khí cho người lái:</label>
-									<input type="checkbox" name="air_bag[]" value="1" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="air_bag[]" {%if 1 in arr%}checked="true"{%endif%} value="1" class="col-md-1 col-md-1 col-sm-1 input_chkbx"/>
 								</div>
 								<div class="row ">
 									<label class="col-md-10 col-sm-10 col-xs-2 title_col">Túi khí cho hành khách phía trước:</label>
-									<input type="checkbox" name="air_bag[]" value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="air_bag[]" {%if 2 in arr%}checked="true"{%endif%} value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row ">
 									<label class="col-md-10 col-sm-10 col-xs-2 title_col">Túi khí cho hành khách phía sau:</label>
-									<input type="checkbox" name="air_bag[]" value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="air_bag[]" {%if 3 in arr%}checked="true"{%endif%} value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row ">
 									<label class="col-md-10 col-sm-10 col-xs-2 title_col">Túi khí hai bên hàng ghế:</label>
-									<input type="checkbox" name="air_bag[]" value="4" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="air_bag[]" {%if 4 in arr%}checked="true"{%endif%} value="4" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-10 col-sm-10 col-xs-2 title_col">Túi khí treo phía trên hai hàng ghế trước và sau:</label>
-									<input type="checkbox" name="air_bag[]" value="5" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="air_bag[]" {%if 5 in arr%}checked="true"{%endif%} value="5" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<hr />
 								<h3>Phanh - Điều khiển</h3>
+								{%if brake|length >0 %}
+									{% set arr = brake|json_decode %}
+								{%else%}
+									{% set arr ={} %}
+								{%endif%}
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Chống bó cứng phanh (ABS):</label>
-									<input type="checkbox" name="brake[]" value="1" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 1 in arr%}checked="true"{%endif%} value="1" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Phân bố lực phanh điện tử (EBD):</label>
-									<input type="checkbox" name="brake[]" value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 2 in arr%}checked="true"{%endif%} value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Trợ lực phanh khẩn cấp (EBA):</label>
-									<input type="checkbox" name="brake[]" value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 3 in arr%}checked="true"{%endif%} value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Tự động cân bằng điện tử (ESP):</label>
-									<input type="checkbox" name="brake[]" value="4" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 4 in arr%}checked="true"{%endif%} value="4" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Điều khiển hành trình:</label>
-									<input type="checkbox" name="brake[]" value="5" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 5 in arr%}checked="true"{%endif%}  value="5" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Hỗ trợ cảnh báo lùi:</label>
-									<input type="checkbox" name="brake[]" value="6" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 6 in arr%}checked="true"{%endif%}  value="6" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-7 col-sm-7 col-xs-2 title_col">Hệ thống kiểm soát trượt:</label>
-									<input type="checkbox" name="brake[]" value="7" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="brake[]" {%if 7 in arr%}checked="true"{%endif%} value="7" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>								
 							</div>
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding_right">
 								<h3>Khóa chống trộm</h3>
+								{%if car_lock|length >0 %}
+									{% set arr = car_lock|json_decode %}
+								{%else%}
+									{% set arr ={} %}
+								{%endif%}
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Chốt cửa an toàn:</label>
-									<input type="checkbox" name="lock[]" value="1" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="car_lock[]" {%if 1 in arr%}checked="true"{%endif%}  value="1" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Khóa cửa tự động:</label>
-									<input type="checkbox" name="lock[]" value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="car_lock[]" {%if 2 in arr%}checked="true"{%endif%} value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Khóa cửa điện điều khiển từ xa:</label>
-									<input type="checkbox" name="lock[]" value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="car_lock[]" {%if 3 in arr%}checked="true"{%endif%} value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Khóa động cơ:</label>
-									<input type="checkbox" name="lock[]" value="4" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="car_lock[]" {%if 4 in arr%}checked="true"{%endif%} value="4" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Hệ thống báo trộm ngoại vi:</label>
-									<input type="checkbox" name="lock[]" value="5" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="car_lock[]" {%if 5 in arr%}checked="true"{%endif%} value="5" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<hr />
 								<h3>Các thông số khác</h3>	
+								{%if safety|length >0 %}
+									{% set arr = safety|json_decode %}
+								{%else%}
+									{% set arr ={} %}
+								{%endif%}
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Đèn sương mù:</label>
-									<input type="checkbox" name="safety[]" value="1" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="safety[]" {%if 1 in arr%}checked="true"{%endif%} value="1" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Đèn cảnh báo thắt dây an toàn:</label>
-									<input type="checkbox" name="safety[]" value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="safety[]" {%if 2 in arr%}checked="true"{%endif%} value="2" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-8 col-sm-8 col-xs-2 title_col">Đèn phanh phụ thứ 3 lắp cao:</label>
-									<input type="checkbox" nname="safety[]" value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="safety[]" {%if 3 in arr%}checked="true"{%endif%} value="3" class="col-md-1 col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>							
 							</div>
 						</div>
@@ -411,65 +399,70 @@
 					<div class="pn_border_2 tab_item_detail" id="tab_detail_3" style="display:none">
 						<div class="row">
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding_left border_left border_right">
-								<h3>Thiết bị tiêu chuẩn</h3>
+								<h3>Thiết bị tiêu chuẩn</h3>								
+								{%if standard_equipment|length >0 %}
+									{% set arr = standard_equipment|json_decode %}
+								{%else%}
+									{% set arr ={} %}
+								{%endif%}
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Thiết bị định vị:</label>
-									<input type="checkbox" name="standard_equipment[]" value="1" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 1 in arr%}checked="true"{%endif%} value="1" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Cửa sổ nóc:</label>
-									<input type="checkbox" name="standard_equipment[]" value="2" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 2 in arr%}checked="true"{%endif%} value="2" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Kính chỉnh điện:</label>
-									<input type="checkbox" name="standard_equipment[]" value="3" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 3 in arr%}checked="true"{%endif%}  value="3" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Tay lái trợ lực:</label>
-									<input type="checkbox" name="standard_equipment[]" value="4" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 4 in arr%}checked="true"{%endif%}  value="4" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Ghế:Chất liệu,tiện nghi..:</label>
-									<input type="text" name="chair_stuff" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="chair_stuff" value="{{chair_stuff}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Điều hòa trước:</label>
-									<input type="checkbox" name="standard_equipment[]" value="5" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 5 in arr%}checked="true"{%endif%} value="5" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Điều hòa sau:</label>
-									<input type="checkbox" name="standard_equipment[]" value="6" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 6 in arr%}checked="true"{%endif%} value="6" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>								
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Hỗ trợ xe tự động:</label>
-									<input type="checkbox" name="standard_equipment[]" value="7" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 7 in arr%}checked="true"{%endif%} value="7" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Xấy kính sau:</label>
-									<input type="checkbox" name="standard_equipment[]" value="8" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 8 in arr%}checked="true"{%endif%} value="8" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Quạt kính phía sau:</label>
-									<input type="checkbox" name="standard_equipment[]" value="9" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 9 in arr%}checked="true"{%endif%} value="9" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Kính mầu:</label>
-									<input type="checkbox" name="standard_equipment[]" value="10" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 10 in arr%}checked="true"{%endif%} value="10" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div> 
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Màn hình LCD:</label>
-									<input type="checkbox" name="standard_equipment[]" value="11" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
+									<input type="checkbox" name="standard_equipment[]" {%if 11 in arr%}checked="true"{%endif%} value="11" class="col-md-1 col-sm-1 col-xs-1 input_chkbx"/>
 								</div>
 								<div class="row">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Thiết bị giải trí Audio, Video:</label>
-									<input type="text" name="audio_video" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="audio_video" value="{{audio_video}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								
 							</div>
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding_right">
 								<h3>Thiết bị khác</h3>
 								<div class="row">									
-									<textarea  name="other_equipment" style="height: 200px" class="col-md-12 col-sm-12 col-xs-12"></textarea>
+									<textarea maxlength="255" name="other_equipment" style="height: 200px" class="col-md-12 col-sm-12 col-xs-12">{{other_equipment}}</textarea>
 								</div>
 							</div>
 						</div>
@@ -480,61 +473,61 @@
 								<h3>Kích thước/Trọng lượng</h3>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Dài x Rộng x Cao (mm):</label>
-									<input type="text" name="length_width_heigh" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="25" name="length_width_heigh" value="{{length_width_heigh}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Chiều dài cơ sở:</label>
-									<input type="text" name="basic_length" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" name="basic_length" value="{{basic_length}}" class="col-md-6 col-sm-6 col-xs-6 number_format"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Chiều rộng cơ sở trước/sau (mm):</label>
-									<input type="text" name="basic_width" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" name="basic_width" value="{{basic_width}}" class="col-md-6 col-sm-6 col-xs-6 number_format"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Trọng lượng không tải (kg):</label>
-									<input type="text" name="weight" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" name="weight" value="{{weight}}" class="col-md-6 col-sm-6 col-xs-6 number_format"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Dung tích bình nhiên liệu (lít):</label>
-									<input type="text" name="fuel_capacity" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" name="fuel_capacity" value="{{fuel_capacity}}" class="col-md-6 col-sm-6 col-xs-6 number_format"/>
 								</div>
 								<hr />
 								<h3>Động cơ</h3>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Động cơ:</label>
-									<input type="text" name="engine" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="engine" value="{{engine}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Kiểu động cơ:</label>
-									<input type="text" name="engine_type" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="engine_type" value="{{engine_type}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Dung tích xi lanh (cc):</label>
-									<input type="text" name="cylinder_vol" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="cylinder_vol" value="{{cylinder_vol}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>								
 							</div>
 							<div class="col-md-6 col-sm-6 col-xs-12 no_padding_right">
-								<h3>Động cơ</h3>
+								<h3>Phanh - Giảm xóc - Lốp</h3>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Phanh:</label>
-									<input type="text" name="brake_des" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="brake_des" value="{{brake_des}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Giảm sốc:</label>
-									<input type="text" name="absorber" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="absorber" value="{{absorber}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Lốp xe:</label>
-									<input type="text" name="tyre" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="tyre" value="{{tyre}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<div class="row row-margin-bottom">
 									<label class="col-md-6 col-sm-6 col-xs-2 title_col">Vành mâm xe:</label>
-									<input type="text" name="rim" class="col-md-6 col-sm-6 col-xs-6"/>
+									<input type="text" maxlength="50" name="rim" value="{{rim}}" class="col-md-6 col-sm-6 col-xs-6"/>
 								</div>
 								<hr/>
 								<h3>Thông số kỹ thuật khác</h3>
 								<div class="row">									
-									<textarea  name="other_tech_para" style="height: 200px" class="col-md-12 col-sm-12 col-xs-12"></textarea>
+									<textarea maxlength="255" name="other_tech_para" style="height: 200px" class="col-md-12 col-sm-12 col-xs-12">{{other_tech_para}}</textarea>
 								</div>
 							</div>
 						</div>
@@ -566,45 +559,50 @@
 						<div class="row">						
 						<div>
 							<h3>Thông tin liên hệ</h3>
+							<h5 style="color: red">(Chỉ thành viên vip mới được thay đổi thông tin liên hệ)</h5>
 						</div>
 						<div class="row row-margin-bottom">
 							<label class="col-md-2 col-sm-2 col-xs-12 title_col">Họ tên <span class="lab_red">(*)</span>:</label>
-							<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="col-md-4 col-sm-4 col-xs-12">
 								<input type="text" name="contract[full_name]" id="contract_name" required value="{{full_name}}">
 								<label class="lab_red lab_invisible" id="contract_name_error">Bạn cần nhập họ tên !</label>
+							</div>
+							<label class="col-md-2 col-sm-2 col-xs-12 title_col">Khu vực: <span class="lab_red">(*)</span>:</label>
+							<div class="col-md-4 col-sm-4 col-xs-12">
+								<label class="select_icon">
+								<select name="m_provin_id" id="m_provin_id">
+									<option value="">-- Chọn khu vực--</option>	
+									{%for item in provin_list%}
+										<option value="{{item.m_provin_id}}" {%if m_provin_id== item.m_provin_id%}selected{%endif%}>{{item.m_provin_name}}</option>	
+									{%endfor%}
+								</select>
+								</label>
+								<label class="lab_red lab_invisible" id="contract_name_error">Bạn cần chọn khu vực!</label>
 							</div>												
 						</div>
 						<div class="row row-margin-bottom">
 							<label class="col-md-2 col-sm-2 col-xs-12 title_col">Địa chỉ:</label>
-							<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="col-md-10 col-sm-10 col-xs-12">
 								<input type="text" name="contract[address]" value="{{contract_address}}">
 							</div>												
 						</div>
 						<div class="row row-margin-bottom">
 							<label class="col-md-2 col-sm-2 col-xs-12 title_col">Điện thoại:</label>
-							<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="col-md-4 col-sm-4 col-xs-12">
 								<input type="text" name="contract[phone]" value="{{phone}}">
-							</div>												
-						</div>
-						<div class="row row-margin-bottom">
+							</div>	
 							<label class="col-md-2 col-sm-2 col-xs-12 title_col">Di động <span class="lab_red">(*)</span>:</label>
-							<div class="col-md-9 col-sm-9 col-xs-12">
+							<div class="col-md-4 col-sm-4 col-xs-12">
 								<input type="text" name="contract[mobie]" id="contract_phone" required value="{{mobie}}">
 								<label class="lab_red lab_invisible" id="contract_phone_error">Bạn cần nhập số di động !</label>
-							</div>												
-						</div>
-						<div class="row row-margin-bottom">
-							<label class="col-md-2 col-sm-2 col-xs-12 title_col">Email:</label>
-							<div class="col-md-9 col-sm-9 col-xs-12">
-								<input type="text" name="contract[email]" value="{{email}}">
-							</div>												
+							</div>											
 						</div>
 					</div>	
 					</div>
 					</form>
 						<div class="row row-margin-bottom" style="margin-top:20px">
 							<div class="col-md-12 col-sm-12 col-xs-12" style="text-align: center;">
-								<button class="btn_dangtin btn_red" id="btn_cancel"><i class="fa fa-times"></i>Hủy bỏ</button>
+								<button  class="btn_dangtin btn_red" id="btn_cancel"><i class="fa fa-times"></i>Hủy bỏ</button>
 								<!--<button class="btn_dangtin" id="btn_preview" style="width:110px;"><i class="fa fa-eye"></i>Xem trước</button>-->
 								<button class="btn_dangtin" id="btn_save" ><i class="fa fa-check-square-o"></i>Đăng tin</button>
 								<button id="mapsubmit" style="display:none">Tìm vị trí</button>
@@ -628,14 +626,10 @@
 	      $('.tab_item_detail').hide();
 	      $($(this).attr('data-tab')).show();
 	   });
-   
-		var district_list = Array();
-		var ward_list = Array();
-		var street_list = Array();
-		var category_list = Array();
-		var unit_list = Array();
+   		
+		var model_list = Array();		
 		{%for item in category_2%}
-			category_list.push(['{{item.ctg_id}}',"{{item.ctg_name}}",'{{item.parent_id}}']);
+			model_list.push(['{{item.ctg_id}}',"{{item.ctg_name}}",'{{item.parent_id}}']);
 		{%endfor%}
 
 		
@@ -646,150 +640,83 @@
           timepicker:false,
           lang:'ru'
     	});
-		//console.log(district_list);
-		function get_basic(){
-			loading_flg = false;
-	        jsion_ajax("{{url.get('posts/wards')}}" ,null,function(datas){               
-	            ward_list = datas.wards;  
-	            change_war_option('m_ward_id');
-	        });
-	    }
-	    function get_street(m_district_id){
-			loading_flg = false;
-	        jsion_ajax("{{url.get('index/street/')}}"+m_district_id ,null,function(datas){               
-	            street_list = datas.streets; 
-	            console.log(datas);
-	            var option = '<option value="">--Chọn Đường/Phố--</option>';
-				$.each(street_list,function(key,item){
-					//console.log(item);
-					//if(val == item['m_district_id']){
-						//if(m_ward_id == item['m_ward_id']){
-							//option +='<option value="'+item['m_ward_id']+'" selected>'+item['m_ward_name']+'</option>';
-						//}else{
-							option +='<option value="'+item['m_street_id']+'">'+item['m_street_name']+'</option>';
-						//}					
-					//}
-				});
-				$('#m_street_id').empty();
-				$('#m_street_id').append(option);
-	        });
-	    }
-	    setTimeout(get_basic(),10);
-		$(document).off('change','#m_provin_id');
-		$(document).on('change','#m_provin_id',function(){			
-			change_district_option('');
-			change_map();
+		
+		$(document).off('change','#make_id');
+		$(document).on('change','#make_id',function(){			
+			change_model_option('');
+			set_name();		
 		});
-		var change_district_option= function(district_id){
-			var val = $('#m_provin_id').val();
-			var option = '<option value="">--Chọn Quận/Huyện--</option>';
-			$.each(district_list,function(key,item){
+		$(document).off('change','#model_id');
+		$(document).on('change','#model_id',function(){
+			set_name();		
+		});
+		$(document).off('blur','#submodel'); 
+        $(document).on('blur','#submodel',function(event){
+        	set_name();
+        });	
+        $(document).off('change','#car_year'); 
+        $(document).on('change','#car_year',function(event){
+        	set_name();
+        });	
+        
+		$(document).off('blur','.number_format'); 
+        $(document).on('blur','.number_format',function(event){
+          var val = $(this).val();
+          if($.isNumeric( val) == false){
+            $(this).val("");
+            return;
+          }
+          $(this).val( parseFloat($(this).val().replace(/,/g, ""))
+                       // .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        );
+        });
+		var change_model_option= function(model_id){
+			var val = $('#make_id').val();
+			var option = '<option value="">--Chọn đời xe--</option>';
+			$.each(model_list,function(key,item){
 				//console.log(item);
 				if(val == item[2]){
-					if(district_id == item[0] ){
+					if(model_id == item[0] ){
 						option +='<option value="'+item[0]+'" selected >'+item[1]+'</option>';
 					}else{
 						option +='<option value="'+item[0]+'" >'+item[1]+'</option>';
 					}					
 				}
 			});
-			$('#m_district_id').empty();
-			$('#m_district_id').append(option);
+			$('#model_id').empty();
+			$('#model_id').append(option);
 		};
+		change_model_option('{{model_id}}');
+		var set_name= function(){
+			var  make_val = $('#make_id option:selected').text();
+			var  model_val =  $('#model_id option:selected').text();
+			var  submodel_val =  $('#submodel').val();
+			var  year_val =  $('#car_year').val();
+			$('#post_name').val(make_val+' '+model_val+' '+submodel_val+ ' - '+year_val);
+		};
+		$(document).off('change','#car_status');
+		$(document).on('change','#car_status',function(){			
+			var val =$(this).val();
+			if(val==1){
+				$('#div_mileage').hide();
+			}else{
+				$('#div_mileage').show();
+			}				
+		});
 		
 
-		$(document).off('change','#m_district_id');
-		$(document).on('change','#m_district_id',function(){			
-			change_war_option('');
-			change_map();
-			dis_id = $(this).val();
-			get_street(dis_id);
-		});
-		var change_war_option = function(m_ward_id){
-			var val = $('#m_district_id').val();
-			var option = '<option value="">--Chọn Phường/Xã--</option>';
-			$.each(ward_list,function(key,item){
-				//console.log(item);
-				if(val == item['m_district_id']){
-					if(m_ward_id == item['m_ward_id']){
-						option +='<option value="'+item['m_ward_id']+'" selected>'+item['m_ward_name']+'</option>';
-					}else{
-						option +='<option value="'+item['m_ward_id']+'">'+item['m_ward_name']+'</option>';
-					}					
-				}
-			});
-			$('#m_ward_id').empty();
-			$('#m_ward_id').append(option);		
-		};
-		
-		$(document).off('change','#m_ward_id');
-		$(document).on('change','#m_ward_id',function(){
-			/*var val = $(this).val();
-			var option = '<option value="">--Chọn Đường/Phố--</option>';
-			$.each(street_list,function(key,item){
-				//console.log(item);
-				if(val == item[2]){
-					option +='<option value="'+item[0]+'">'+item[1]+'</option>';
-				}
-			});
-			$('#m_street_id').empty();
-			$('#m_street_id').append(option);*/				
-		});
-		
-		$(document).off('change','#m_street_id');
-		$(document).on('change','#m_street_id',function(){
-			change_map();
-		});
-		$(document).off('change','#post_address');
-		$(document).on('change','#post_address',function(){
-			change_location();
-		});
-		//change_m_type_id($("input[name='m_type_id']:checked").val());
-		$(document).off('change','.m_type_id');
-		$(document).on('change','.m_type_id',function(){
-			//var val = $("input[name='m_type_id']:checked").val();
-			change_m_type_id('');
-			change_unit_price('');
-		});
-		function change_m_type_id(ctg_id){
-			var val = $("input[name='m_type_id']:checked").val();
-			var option = '<option value="">--Chọn loại bất động sản--</option>';
-			$.each(category_list,function(key,item){
-				//console.log(item);
-				if(val == item[2]){
-					if(ctg_id == item[0]){
-						option +='<option value="'+item[0]+'" selected>'+item[1]+'</option>';
-					}else{
-						option +='<option value="'+item[0]+'">'+item[1]+'</option>';
-					}					
-				}
-			});
-			$('#ctg_id').empty();
-			$('#ctg_id').append(option);
-		}		
-		
-		function change_unit_price(m_unit_id){
-			var val = $("input[name='m_type_id']:checked").val();
-			var option = '<option value="">--Chọn đơn vị--</option>';			
-			$.each(unit_list,function(key,item){
-				//console.log(item);
-				if(val == item[2]){
-					if(m_unit_id == item[0]){
-						option +='<option value="'+item[0]+'" selected>'+item[1]+'</option>';
-					}else{
-						option +='<option value="'+item[0]+'">'+item[1]+'</option>';
-					}					
-				}
-			});
-			$('#unit_price').empty();
-			$('#unit_price').append(option);
-		}
-		change_unit_price('{{unit_price}}');
 		
 		function topFunction() {
 		    document.body.scrollTop = 0; // For Chrome, Safari and Opera 
 		    document.documentElement.scrollTop = 0; // For IE and Firefox
-		}		
+		}	
+			
+		$(document).off('click','#btn_cancel'); 
+        $(document).on('click','#btn_cancel',function(event){
+        	location.href="{{url.get('tin-da-dang')}}";
+        });
 		$(document).off('click','#btn_save'); 
         $(document).on('click','#btn_save',function(event){
         	var msg = check_validate_update();
@@ -811,9 +738,10 @@
         var check_validate_update = function(){
         	var flg = true;
         	$('input:required').each(function(key,item){
-        		if($(this).val().trim().length == 0){
+        		if($(this).val().trim().length == 0 && $(this).is(":visible")){
         			$('#'+ $(this).attr('id') + "_error").show();
         			flg = false;
+        			console.log($(this).attr('id'));
         		}else{
         			$('#'+ $(this).attr('id') + "_error").hide();
         		}
@@ -822,6 +750,7 @@
         		if($(this).val().trim().length == 0){
         			$('#'+ $(this).attr('id') + "_error").show();
         			flg = false;
+        			console.log($(this).attr('id'));
         		}else{
         			$('#'+ $(this).attr('id') + "_error").hide();
         		}
@@ -830,6 +759,7 @@
         		if($(this).val().trim().length == 0){
         			$('#'+ $(this).attr('id') + "_error").show();
         			flg = false;
+        			console.log($(this).attr('id'));
         		}else{
         			$('#'+ $(this).attr('id') + "_error").hide();
         		}

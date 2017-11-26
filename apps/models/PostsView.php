@@ -29,15 +29,17 @@ class PostsView extends DBModel
     }
     public function _insert($param){
         $this->post_id = $param['post_id'];
-        $this->start_date = \DateTime::createFromFormat('d/m/Y', $param['start_date'])->format('Y-m-d');// date_format(date_create($param['start_date'],'d/m/Y'),'Y-m-d');
-        $this->end_date =\DateTime::createFromFormat('d/m/Y', $param['end_date'])->format('Y-m-d');// date_format(date_create($param['end_date'],'d/m/Y'),'Y-m-d');
-        $this->post_level = $param['post_level'];
+        $this->start_date = date('Y-m-d');
+        $this->end_date = date('Y-m-d', strtotime("+90 days"));
+        //$this->start_date = \DateTime::createFromFormat('d/m/Y', $param['start_date'])->format('Y-m-d');// date_format(date_create($param['start_date'],'d/m/Y'),'Y-m-d');
+        //$this->end_date =\DateTime::createFromFormat('d/m/Y', $param['end_date'])->format('Y-m-d');// date_format(date_create($param['end_date'],'d/m/Y'),'Y-m-d');
+        $this->post_level = 1;//$param['post_level'];
         $this->add_user_id = $param['user_id'];
         $this->upd_user_id = $param['user_id'];
-        $this->total_day= $param['total_day'];
-		$this->price= $param['price'];
-		$this->vat= $param['vat'];
-		$this->total_amount = $param['total_amount'];
+        $this->total_day= 90;//$param['total_day'];
+		//$this->price= $param['price'];
+		//$this->vat= $param['vat'];
+		//$this->total_amount = $param['total_amount'];
 		$this->hide_flg = 0;
         //PhoLog::debug_var('date----',$param);
         //PhoLog::debug_var('date----','start:'.$this->start_date);
@@ -66,7 +68,7 @@ class PostsView extends DBModel
                     ,'vat'
                     ,'total_amount'                  
                     ));
-        $sql_par['start_date']=\DateTime::createFromFormat('d/m/Y', $param['start_date'])->format('Y-m-d');
+        //$sql_par['start_date']=\DateTime::createFromFormat('d/m/Y', $param['start_date'])->format('Y-m-d');
         $sql_par['end_date']=\DateTime::createFromFormat('d/m/Y', $param['end_date'])->format('Y-m-d');
         $this->pho_execute($sql,$sql_par );  
         return TRUE;

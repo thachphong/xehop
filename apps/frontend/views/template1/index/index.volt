@@ -20,7 +20,7 @@
                  <a href="javascript:void(0)" class="tab_title active" data="1">Tìm bán ôtô</a>
                  <a href="javascript:void(0)" class="tab_title" data="2">Tìm mua ôtô</a>
             </div>
-            <form>              
+            <form action="{{url.get('tim')}}" method="GET">              
               <input type="hidden" name="mtype" value="1">
               <input type="" name="" style="width:80%">
               <button class="btn_search"><i class="fa fa-search"></i>Tìm kiếm</button>
@@ -36,25 +36,48 @@
                  <a href="javascript:void(0)" class="tab_title" data="2">TP HCM</a>
                  <a href="javascript:void(0)" class="tab_title" data="2">Hà Nội</a>
             	</div>
-               <a class="read_more" href="{{url.get('tin-moi')}}">>> Xem thêm tin rao mới</a>
+               <!--<a class="read_more" href="{{url.get('tin-moi')}}">>> Xem thêm tin rao mới</a>-->
             </div>
-            <div class="new_list">
+            <div class="new_list pn_border margin_top">
                {%for item in newlist%}
-                  <div class="row margin_top_5 pn_background pn_border">
+                  <div class="row pn_background border_bottom">
                      <div class="col-md-3 col-sm-3 col-xs-3 post_img">
+                     	<div class="row" style="text-align: center">                     	
+                     		{{item['car_status']}} <strong>{{item['car_year']}} </strong>                    		
+                     	</div>
+                     	<div class="row">
                         <a href="{{url.get('b/')}}{{item['post_no']}}_{{item['post_id']}}">
-                        <img src="{%if item['img_path']|length ==0%}{{url.get('crop/176x118/template1/images/post0.png')}}{%else%}{{url.get('crop/140x100/')}}{{item['img_path']}}{%endif%}" class="img_newlist" alt="{{item['post_name']}}" title="{{item['post_name']}}">
+                        <img src="{%if item['img_path']|length ==0%}{{url.get('crop/103x74/template1/images/post0.png')}}{%else%}{{url.get('crop/103x74/')}}{{item['img_path']}}{%endif%}" class="img_newlist" alt="{{item['post_name']}}" title="{{item['post_name']}}">
                         </a>
-                     </div>
-                     <div class="col-md-9 col-sm-9 col-xs-9">
-                        <a href="{{url.get('b/')}}{{item['post_no']}}_{{item['post_id']}}" class="post_title {%if item['post_level']==3%}sieu_vip{%elseif item['post_level']==2%}vip{%elseif item['post_level']==1%}hot{%endif%}">{%if item['post_level']==3%}<i class="fa fa-star"></i>{%endif%}{{item['post_name']}}</a>
-                        <div class="icon_post"><label><!--<i class="fa fa-usd"></i>-->Giá<span>: </span></label><strong>{%if item['price'] is defined%}{{item['price']}} {{item['m_unit_name']}}{%else%}Thỏa thuận{%endif%}</strong>
-                        <strong class="icon_dientich"><!--<i class="fa fa-university"></i>-->Diện tích<span>: </span></strong>{%if item['acreage'] is defined%}{{item['acreage']}} m2{%else%}Không xác định{%endif%}
                         </div>
-                        <div class="icon_post"></div>
-                        <div class="icon_post"><label><!--<i class="fa fa-map-marker"></i>-->Địa chỉ<span>: </span></label>{%if item['m_ward_name'] is defined%}{{item['m_ward_name']}} - {%endif%}
-                        {{item['m_district_name']}} - {{item['m_provin_name']}}</div>
-                        <span class="post_date">{{item['start_date']}}</span>
+                     </div>
+                     <div class="col-md-9 col-sm-9 col-xs-9 no_padding">
+                     	<div class="row">
+	                     	<div class="col-md-7 col-sm-7 col-xs-7 no_padding">
+	                        <a href="{{url.get('b/')}}{{item['post_no']}}_{{item['post_id']}}" class="post_title">{%if item['post_level']==3%}<i class="fa fa-star"></i>{%endif%}{{item['post_name']}}</a>
+	                        </div>
+	                        <div class="col-md-3 col-sm-3 col-xs-3 no_padding">
+	                        <strong>{%if item['price'] is defined%}{{item['price']}} {{item['unit_name']}}{%else%}Thỏa thuận{%endif%}</strong>  </div>
+	                        <div class="col-md-2 col-sm-2 col-xs-2 no_padding">
+	                        <strong >{{item['m_provin_name']}}</strong>
+	                        </div>
+                        </div>
+                        <div class="row">
+                        	<div class="col-md-7 col-sm-7 col-xs-7 no_padding">
+                        		<p>Xe {{item['from_type']}},
+                        		{%if item['color_name'] is defined%}màu {{item['color_name']}},{%endif%}
+                        		{%if item['fueltype_name'] is defined%}máy {{item['fueltype_name']}},{%endif%}
+                        		{%if item['transmission_name']|length >0%}{{item['transmission_name']}},{%endif%}
+                        		{%if item['mileage'] >0%}đã đi {{item['mileage']}} km{%endif%} ...
+                        		</p>
+                        		<p>{{elements.substr_des(item['content'])}} ...</p>
+                        	</div>
+                        	<div class="col-md-5 col-sm-5 col-xs-5 no_padding">
+                        		<p>Liên hệ: <strong>{{item['full_name']}}</strong> {{item['address']}}</p>
+                        		<p>ĐT: <strong>{{item['mobie']}}</strong></p>
+                        	</div>
+                        </div>
+                        
                      </div>
                   </div>
                {%endfor%}

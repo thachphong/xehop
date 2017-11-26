@@ -9,7 +9,7 @@
 			<div class="row margin_top pn_background pn_border post_pn" >
 				<form enctype="multipart/form-data" id="from_post" action="{{url.get('tin-da-dang')}}" method="get">						
 						<div class="row row-margin-bottom">							
-							<div class="col-md-3 col-sm-3 col-xs-12">
+							<!--<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
 								<label class="select_icon">
 									<select name="plevel" id="plevel" >
 										<option value="">--Loại tin--</option>
@@ -20,14 +20,17 @@
 										
 									</select>
 								</label>
+							</div>-->
+							<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
+								<input  type="text" name="postno" value="{{postno}}" id="postno" placeholder="Mã tin">
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
 								<input name="fdate" class="datetimepicker datepost" placeholder="Từ ngày" value="{{fdate}}"/>
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
 								<input name="tdate" class="datetimepicker datepost" placeholder="đến ngày" value="{{tdate}}"/>
 							</div>
-							<div class="col-md-3 col-sm-3 col-xs-12">
+							<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
 								<label class="select_icon">
 									<select name="status" id="status" >
 										<option value="">--Trạng thái--</option>
@@ -37,11 +40,12 @@
 										<option value="4" {%if status == '4'%}selected{%endif%}>Tin hết hạn</option>
 									</select>
 								</label>
-							</div>							
+							</div>
+														
 						</div>
 						<div class="row row-margin-bottom">							
-							<div class="col-md-10 col-sm-10 col-xs-12">
-								<input class="col-md-3" type="text" name="postno" value="{{postno}}" id="postno" placeholder="Mã tin">			<span class="col-md-9 col-sm-9 col-xs-12" style="    padding-top: 7px;">Lưu ý: khi nhập mã tin thì các bộ lọc khác không có tác dụng</span>		
+							<div class="col-md-10 col-sm-10 col-xs-12 no_padding_left">
+								<span style="padding-top: 7px;">Lưu ý: khi nhập mã tin thì các bộ lọc khác không có tác dụng</span>		
 							</div>							
 							<div class="col-md-2 col-sm-2 col-xs-12">
 								<button class="btn_dangtin"><i class="fa fa-search"></i>Tìm</button>		
@@ -56,8 +60,7 @@
 								<th>Mã tin</th>
 								<th>Tiêu đề</th>
 								<th>Trạng thái</th>
-								<th>Ngày đăng</th>
-								<th>Ngày hết hạn</th>
+								<th>Ngày đăng</th>								
 								<th>Sửa</th>							
 								<th>Xóa</th>
 							</tr>
@@ -70,8 +73,7 @@
 								{%else%}
 									<td>{{item['status']}}</td>
 								{%endif%}
-								<td>{{item['start_date']}}</td>
-								<td>{{item['end_date']}}</td>
+								<td>{{item['start_date']}}</td>								
 								{%if item['end_flg'] =='1'%}
 									<td style="width: 68px;"><a href="{{url.get('posts/increase/')}}{{item['post_id']}}" class="btn_blue">Gia hạn</a></td>
 								{%else%}

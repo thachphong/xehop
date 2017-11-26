@@ -5,6 +5,7 @@ namespace Multiple\Frontend\Controllers;
 use Multiple\PHOClass\PHOController;
 use Multiple\Models\Users;
 use Multiple\Models\Define;
+use Multiple\Models\Provincial;
 use Multiple\Library\Mail;
 use Multiple\PHOClass\PhoLog;
 use Multiple\Library\FilePHP;
@@ -14,7 +15,9 @@ class UsersController extends PHOController
 	{		
 	}
 	public function registerAction(){
+		$result['provin_list'] = Provincial::get_all();	
 		$this->set_template_share();
+		$this->ViewVAR($result);	
 	}
 	public function successAction(){
 		$this->set_template_share();
@@ -68,7 +71,7 @@ class UsersController extends PHOController
         $this->session->set('auth', $user);
     }
 	public function updateAction(){
-		$param = $this->get_param(array('user_no','user_name','email','mobile','address','pass','sex'));
+		$param = $this->get_param(array('user_no','user_name','email','mobile','address','pass','sex','city'));
 		$result = array('status' => 'OK');
 		$result['status'] = 'OK';	
 		$result['msg'] = 'Cập nhật thành công!';		

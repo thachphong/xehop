@@ -12,6 +12,7 @@ class Users extends DBModel
     public $user_no;
     public $user_name;
     public $mobile;
+    public $phone;
     public $address;
     public $city;
     public $district;
@@ -87,6 +88,7 @@ class Users extends DBModel
         $this->pass = $this->encodepass($param['pass']);
         $this->email =$param['email'];
         $this->sex =$param['sex'];
+        $this->city =$param['city'];
         $this->avata ='0.png';
         return $this->save();
     }

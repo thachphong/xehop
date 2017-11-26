@@ -11,11 +11,11 @@ use Multiple\Models\PostsContract;
 use Multiple\Models\Tags;
 use Multiple\Models\CheckView;
 use Multiple\Models\Provincial;
-use Multiple\Models\District;
-use Multiple\Models\Ward;
-use Multiple\Models\Street;
-use Multiple\Models\Directional;
-use Multiple\Models\Unit;
+use Multiple\Models\BodyType;
+use Multiple\Models\Mcolor;
+use Multiple\Models\Mdrivetrain;
+use Multiple\Models\Mfueltype;
+use Multiple\Models\PostsMore;
 use Multiple\Models\Category;
 use Multiple\Library\FilePHP;
 use Multiple\PHOClass\PhoLog;
@@ -34,7 +34,13 @@ class PostsController extends PHOController
 		$result = $cache->get($cacheKey);
 		if($result === null){	
 			$result['category_1'] = Category::get_bylevel(1);
-			$result['category_2'] = Category::get_bylevel(2);	
+			$result['category_2'] = Category::get_bylevel(2);
+			$result['provin_list'] = Provincial::get_all();	
+			$result['bodytype_list'] = BodyType::get_all();
+			$result['color_list'] = Mcolor::get_all();
+			$result['fueltype_list'] = Mfueltype::get_all();
+			$result['drivetrain_list'] = Mdrivetrain::get_all();
+			
 			$result['current_year'] = date('Y') +1;		
 			$ndb = new News();		
 			$cache->save($cacheKey,$result);
@@ -54,9 +60,9 @@ class PostsController extends PHOController
 			$result['mileage']='';
 			$result['body_style_id']='';
 			$result['price']='';
-			$result['unit_price']='';
+			$result['unit_price']='1';
 			$result['exterior_color_id']='';
-			$result['interior_color_id']='';
+			$result['interior_color_id']='';			
 			$result['address_ascii']='';
 			$result['content']='';			
 			$result['num_doors']='';
@@ -67,12 +73,37 @@ class PostsController extends PHOController
 			$result['fuel_system']='';
 			$result['fuel_consumer']='';
 			$result['post_contract_id']='';	
-			$result['full_name']='';
-			$result['contract_address']='';
-			$result['phone']='';
-			$result['mobie']='';
-			$result['email']='';
-			$result['img_list']=array();						
+			$user= $this->session->get('auth');
+			$result['full_name']=$user->user_name;
+			$result['contract_address']=$user->address;
+			$result['phone']=$user->phone;
+			$result['mobie']=$user->mobile;
+			$result['m_provin_id']=$user->city;
+			$result['img_list']=array();	
+			$result['posts_more_id']='';
+			$result['post_id']='';
+			$result['air_bag']='';
+			$result['brake']='';
+			$result['car_lock']='';
+			$result['safety']='';
+			$result['standard_equipment']=null;
+			$result['chair_stuff']='';
+			$result['audio_video']='';
+			$result['other_equipment']='';
+			$result['length_width_heigh']='';
+			$result['basic_length']='';
+			$result['basic_width']='';
+			$result['weight']='';
+			$result['engine']='';
+			$result['engine_type']='';
+			$result['cylinder_vol']='';
+			$result['brake_des']='';
+			$result['absorber']='';
+			$result['tyre']='';
+			$result['rim']='';
+			$result['other_tech_para']='';
+			$result['fuel_capacity']='';
+					
 		}else{
 			$db = new Posts();
 			$dbimg = new PostsImg();
@@ -102,13 +133,14 @@ class PostsController extends PHOController
 	public function updateAction(){
 		try{
 			$param = $_POST;
-			//PhoLog::debug_var('test----',$param);
+			PhoLog::debug_var('post----',$param);
 			$result = array('status' => 'OK');
 			$result['status'] = 'OK';	
 			$result['msg'] = 'Cập nhật thành công!';		
 			$db = new Posts();
 			$pview = new PostsView();		
 			$pcon = new PostsContract();
+			$pmo = new PostsMore();
 			$msg = $this->check_validate_update($param);
 			$add_date = "";
 			if($msg == ""){
@@ -118,7 +150,7 @@ class PostsController extends PHOController
 	       // 	$listfile = $this->get_listfile($param['content']);
 	        	$paview   =  $param['view'];
 	        	$paview['user_id'] = $param['user_id'];
-	        	$contract =  $param['contract'];
+	        	$contract =  $param['contract'];	        	
 	        	$edit_flg = false;
 				if(strlen($param['post_id'])==0){
 					//PhoLog::debug_var('update----','insert');
@@ -131,6 +163,7 @@ class PostsController extends PHOController
 					//PhoLog::debug_var('update----','2');
 					$pview->_insert($paview);	
 					$pcon->_insert($contract);
+					$pmo->_insert($param);
 					//PhoLog::debug_var('update----','3');
 					$result['msg'] = $id;
 				}else{
@@ -141,9 +174,10 @@ class PostsController extends PHOController
 					$paview['post_view_id'] = $param['post_view_id'];
 					$contract['post_id'] = $param['post_id'];
 					$contract['post_contract_id'] = $param['post_contract_id'];
-					$pview->_update($paview);
+					//$pview->_update($paview);
 					//PhoLog::debug_var('update----','2');				
 					$pcon->_update($contract);
+					$pmo->_update($param);
 					//PhoLog::debug_var('update----','3');
 
 					$po = $db->get_by_id($param['post_id']);
@@ -237,13 +271,13 @@ class PostsController extends PHOController
 		$path = 'images/news/'.$year.'/'.$month.'/'.$day.'/'.$post_id;
 		return $path;
 	}
-	public function check_validate_update(&$param){
-		$param['post_no'] = $this->convert_url($param['post_name']);
+	public function check_validate_update(&$param){		
+		$param['post_no'] = 'xe-'.$this->convert_url($param['post_name']);
 		$param['address_ascii'] = $this->convert_ascii($param['address']);	
-		$code = $this->session->get('captcha_code');
-		if($param['capcha_code'] != $code){
-			return 'Mã an toàn không đúng, vui lòng nhập lại!';
-		}	
+		// $code = $this->session->get('captcha_code');
+		// if($param['capcha_code'] != $code){
+		// 	return 'Mã an toàn không đúng, vui lòng nhập lại!';
+		// }	
 		return "";
 	}	
 	public function successAction($post_id){

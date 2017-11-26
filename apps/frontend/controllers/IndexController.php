@@ -31,19 +31,19 @@ class IndexController extends PHOController
 	 		PhoLog::debug_var('test',__LINE__);
 	 		$ne = new News();
 	 		//$param  = $this->dataCache->get($cacheKey);
-	 		$param = $cache->get($cacheKey);
+	 		//$param = $cache->get($cacheKey);
 	 		PhoLog::debug_var('test',__LINE__);
-	 		if($param === null){
+	 		/*if($param === null){
 	 			PhoLog::debug_var('test',__LINE__);
-	 			$param['kientruc'] = $ne->get_news_rows(72,8); // tin tuc
-				$param['noingoaithat'] = $ne->get_news_rows(66,6); // noi ngoai that
-				$param['phongthuy'] = $ne->get_news_rows(68,4); // phong thuy
-				$param['tuvanluat'] = $ne->get_news_rows(69,4); // tu van luat
-				$sl = new Slide();
+	 			//$param['kientruc'] = $ne->get_news_rows(72,8); // tin tuc
+				//$param['noingoaithat'] = $ne->get_news_rows(66,6); // noi ngoai that
+				//$param['phongthuy'] = $ne->get_news_rows(68,4); // phong thuy
+				//$param['tuvanluat'] = $ne->get_news_rows(69,4); // tu van luat
+				//$sl = new Slide();
 				
 				
-				PhoLog::debug_var('test',__LINE__);
-				$param['slides'] = $sl->get_slides_list(0);						
+				//PhoLog::debug_var('test',__LINE__);
+				//$param['slides'] = $sl->get_slides_list(0);						
 				//$frontendCache->save( $param);
 				$cache2 = $this->createCache( ['lifetime' => 9000 ]); // 150 phut
 				$cacheKey2 = 'seachtopparam1.cache';
@@ -60,10 +60,10 @@ class IndexController extends PHOController
 				$param = array_merge($param, $search_pa);
 
 				$cache->save($cacheKey, $param);
-	 		}		
-			PhoLog::debug_var('test',__LINE__);
+	 		}	*/	
+			//PhoLog::debug_var('test',__LINE__);
 			$db = new Posts();		
-			$param['newlist'] = array();//$db->get_list_new('',12);
+			$param['newlist'] = $db->get_list_new('',12);
 			//$param['viplist'] = $db->get_list_new(3);
 			//$param['xemnhieu'] = $ne->get_news_pupular(5);
 			$this->set_template_share();

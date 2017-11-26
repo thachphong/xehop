@@ -8,6 +8,11 @@ use Multiple\Models\Category;
 use Multiple\Models\News;
 use Multiple\Models\Project;
 use Multiple\PHOClass\PhoLog;
+use Multiple\Models\Provincial;
+use Multiple\Models\BodyType;
+use Multiple\Models\Mcolor;
+use Multiple\Models\Mdrivetrain;
+use Multiple\Models\Mfueltype;
 //use Phalcon\Cache\Backend\File as BackFile;
 //use Phalcon\Cache\Frontend\Data as FrontData;
 class CategoryController extends PHOController
@@ -201,7 +206,7 @@ class CategoryController extends PHOController
         }
 
         $param['page'] = $page;
-        $param['ctg_name'] ='Kết quả tìm';
+        $param['ctg_name'] ='Tìm mua ôtô cũ - mới';
         $param['ctg_no'] = str_replace('/','', $_SERVER['REQUEST_URI']);
         $exp = explode('&page',$param['ctg_no'])  ;
         $param['ctg_no']=  $exp[0]; 
@@ -233,10 +238,29 @@ class CategoryController extends PHOController
         $param['end'] = $end;
         $param['dstlist'] = array();
         //if(isset($param['provin']) && strlen($param['provin']) > 0){
-            $param['dstlist'] = $db->get_bydistrict($param);
+            //$param['dstlist'] = $db->get_bydistrict($param);
         //}
         //PhoLog::debug_var('---abc--',$param['dstlist']);
         //$this->set_template_share();
+        
+        $cache = $this->createCache( ['lifetime' => 86400 ]); // 1 ngay
+        $cacheKey = 'param_search.cache';
+        $pa_s = $cache->get($cacheKey);
+        if($pa_s === null){   
+            $pa_s['category_1'] = Category::get_bylevel(1);
+            $pa_s['category_2'] = Category::get_bylevel(2);
+            $pa_s['provin_list'] = Provincial::get_all(); 
+            $pa_s['bodytype_list'] = BodyType::get_all();
+            $pa_s['color_list'] = Mcolor::get_all();
+            $pa_s['fueltype_list'] = Mfueltype::get_all();
+            $pa_s['drivetrain_list'] = Mdrivetrain::get_all();            
+            $pa_s['current_year'] = date('Y') +1;     
+            $ndb = new News();      
+            $cache->save($cacheKey,$result);
+        }
+        $param['make_id']='';
+        $param['model_id']='';
+        $param = array_merge($param,$pa_s);
         $this->ViewVAR($param);
 	}
 }
