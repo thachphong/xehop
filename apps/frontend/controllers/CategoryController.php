@@ -214,7 +214,7 @@ class CategoryController extends PHOController
         if(isset($param['addr']) && strlen($param['addr']) > 0){
             $param['address_ascii'] = $this->convert_ascii($param['addr']);
         }   
-        $param['post']=$db->search_posts($param,$start_row);
+        $param['posts']=$db->search_posts($param,$start_row);
         $param['total_post'] = $db->search_posts_count($param);
         $param['total_page']= round($param['total_post']/PAGE_LIMIT_RECORD);
         
@@ -258,8 +258,23 @@ class CategoryController extends PHOController
             $ndb = new News();      
             $cache->save($cacheKey,$result);
         }
-        $param['make_id']='';
-        $param['model_id']='';
+        $s2['fyear']='';
+        $s2['tyear']='';
+        $s2['makeid']='';
+        $s2['modid']='';
+        $s2['ftype']='';
+        $s2['fuelid']='';
+        $s2['color']='';
+        $s2['bodyid']='';
+        $s2['nseat']='';
+        $s2['drive']='';
+        $s2['carsta']='';
+        $s2['smissi']=''; 
+        $s2['fprice']='1000000';
+        $s2['tprice']='2100000000';       
+        PhoLog::debug_var('---$s2--',$param);
+        $param = array_merge($s2,$param);
+        PhoLog::debug_var('---$s2--',$param);
         $param = array_merge($param,$pa_s);
         $this->ViewVAR($param);
 	}

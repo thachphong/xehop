@@ -20,9 +20,8 @@
                  <a href="javascript:void(0)" class="tab_title active" data="1">Tìm bán ôtô</a>
                  <a href="javascript:void(0)" class="tab_title" data="2">Tìm mua ôtô</a>
             </div>
-            <form action="{{url.get('tim')}}" method="GET">              
-              <input type="hidden" name="mtype" value="1">
-              <input type="" name="" style="width:80%">
+            <form action="tim" method="GET" id="search_form">
+              <input type="text" name="sname" style="width:80%">
               <button class="btn_search"><i class="fa fa-search"></i>Tìm kiếm</button>
             </form>
             
@@ -98,8 +97,13 @@ $(document).ready(function() {
     $(document).off('click','.tab_title');
     $(document).on('click','.tab_title',function(){
         $(this).parent().find('.tab_title').removeClass('active');
-        $(this).addClass('active');      
-        $('#mtype').val($(this).attr('data'));      
+        $(this).addClass('active'); 
+        if($(this).attr('data')=="1"){
+        	$('#search_form').attr('action','tim');
+        }else{
+        	$('#search_form').attr('action','tim-mua');
+        }     
+              
     });
 
 		var autocroll= function () {

@@ -425,80 +425,68 @@ class Posts extends DBModel
 		$where ="";
 		$search = array();
 
-		if(isset($param['ctgid']) && strlen($param['ctgid']) > 0){
-			$where .=" and p.ctg_id =:ctg_id";	
-			$search['ctg_id'] =	$param['ctgid'];			
+		if(isset($param['makeid']) && strlen($param['makeid']) > 0){
+			$where .=" and p.make_id =:make_id";	
+			$search['make_id'] =	$param['makeid'];			
 		}
-		if(isset($param['provin']) && strlen($param['provin']) > 0){
-			$where .=" and p.m_provin_id =:m_provin_id";	
-			$search['m_provin_id'] =	$param['provin'];			
+		if(isset($param['modid']) && strlen($param['modid']) > 0){
+			$where .=" and p.model_id = :model_id";	
+			$search['model_id'] =	$param['modid'];			
 		}
-		if(isset($param['district']) && strlen($param['district']) > 0){
-			$where .=" and p.m_district_id =:m_district_id";	
-			$search['m_district_id'] =	$param['district'];			
+		if(isset($param['carsta']) && strlen($param['carsta']) > 0){
+			$where .=" and p.car_status = :car_status";	
+			$search['car_status'] =	$param['carsta'];			
 		}
-		if(isset($param['ward']) && strlen($param['ward']) > 0){
-			$where .=" and p.m_ward_id =:m_ward_id";	
-			$search['m_ward_id'] =	$param['ward'];			
+		if(isset($param['fyear']) && strlen($param['fyear']) > 0){
+			$where .=" and p.car_year >= :fyear";	
+			$search['fyear'] =	$param['fyear'];			
 		}
-		if(isset($param['street']) && strlen($param['street']) > 0){
-			$where .=" and p.m_street_id =:m_street_id";	
-			$search['m_street_id'] =	$param['street'];			
+		if(isset($param['tyear']) && strlen($param['tyear']) > 0){
+			$where .=" and p.car_year <= :fyear";	
+			$search['tyear'] =	$param['tyear'];			
 		}
-		if(isset($param['roomnum']) && strlen($param['roomnum']) > 0){
-			$where .=" and p.room_num  > :room_num";	
-			$search['room_num'] =	$param['roomnum'];			
+		if(isset($param['smissi']) && strlen($param['smissi']) > 0){
+			$where .=" and p.transmission_id =:transmission_id";	
+			$search['transmission_id'] =	$param['smissi'];			
 		}
-		if(isset($param['directional']) && strlen($param['directional']) > 0){
-			$where .=" and p.m_directional_id  = :m_directional_id";	
-			$search['m_directional_id'] =	$param['directional'];			
+		if(isset($param['fprice']) && strlen($param['fprice']) > 0 && $param['fprice'] != 1000000){ //min price
+			$where .=" and p.price  >= :fprice";	
+			$search['fprice'] =	$param['fprice'];			
 		}
-		if(isset($param['address_ascii']) && strlen($param['address_ascii']) > 0){
-			$where .=" and p.address_ascii  like :address_ascii";	
-			$search['address_ascii'] =	'%'.str_replace(' ','%',$param['address_ascii']).'%';			
+		if(isset($param['tprice']) && strlen($param['tprice']) > 0 && $param['tprice'] != 2100000000){ //max price			
+			$where .=" and p.price  <= :tprice";	
+			$search['tprice'] =	$param['tprice'];								
 		}
-		
-		if(isset($param['acreage']) && $param['acreage']> 0){
-			switch ($param['acreage']) {
-			    case 1:  $where .=" and p.acreage <=30";break;
-				case 2:  $where .=" and p.acreage between 30 and 50";break;
-				case 3:  $where .=" and p.acreage between 50 and 80";break;
-				case 4:  $where .=" and p.acreage between 80 and 100";break;
-				case 5:  $where .=" and p.acreage between 100 and 150";break;
-				case 6:  $where .=" and p.acreage between 150 and 200";break;
-				case 7:  $where .=" and p.acreage between 200 and 250";break;
-				case 8:  $where .=" and p.acreage between 250 and 300";break;
-				case 9:  $where .=" and p.acreage between 300 and 500";break;
-				case 10: $where .=" and p.acreage > 500";break;   
-			}						
+		if(isset($param['fuelid']) && strlen($param['fuelid']) > 0){
+			$where .=" and p.fueltype_id  = :fueltype_id";	
+			$search['fueltype_id'] =	$param['fuelid'];			
 		}
-		
-		if(isset($param['price']) && $param['price']> 0){
-			switch ($param['price']) {
-			    case 2:  $where .=" and p.price <=500 and p.unit_price = 2";break;
-				case 3:  $where .=" and p.price between 500 and 800 and p.unit_price = 2";break;
-				case 4:  $where .=" and p.price between 800 and 1000 and p.unit_price = 2";break;
-				case 5:  $where .=" and p.price between 1 and 2 and p.unit_price = 3";break;
-				case 6:  $where .=" and p.price between 2 and 3 and p.unit_price = 3";break;
-				case 7:  $where .=" and p.price between 5 and 7 and p.unit_price = 3";break;
-				case 8:  $where .=" and p.price between 7 and 10 and p.unit_price = 3";break;
-				case 9:  $where .=" and p.price between 10 and 20 and p.unit_price = 3";break;
-				case 10:  $where .=" and p.price between 20 and 30 and p.unit_price = 3";break;
-				case 11:  $where .=" and p.price >30 and p.unit_price = 3";break;
-				case 12:  $where .=" and p.price between 1 and 2 and p.unit_price = 3";break;
-				//case 13:  $where .=" and p.price between 1 and 2 and p.unit_price = 3";break;
-				case 14:  $where .=" and p.price <1000 and p.unit_price = 10";break;
-				case 15:  $where .=" and p.price between 1 and 3 and p.unit_price = 10";break;
-				case 16:  $where .=" and p.price between 3 and 5 and p.unit_price = 10";break;
-				case 17:  $where .=" and p.price between 5 and 10 and p.unit_price = 10";break;
-				case 18:  $where .=" and p.price between 10 and 40 and p.unit_price = 10";break;
-				case 19:  $where .=" and p.price between 40 and 70 and p.unit_price = 10";break;
-				case 20:  $where .=" and p.price between 70 and 100 and p.unit_price = 10";break;
-				case 21:  $where .=" and p.price > 100 and p.unit_price = 10";break;
-
-			}						
+		if(isset($param['ftype']) && strlen($param['ftype']) > 0){
+			$where .=" and p.from_type  = :from_type";	
+			$search['from_type'] =	$param['ftype'];			
 		}
-		$where ="";
+		if(isset($param['color']) && strlen($param['color']) > 0){
+			$where .=" and p.exterior_color_id  = :exterior_color_id";	
+			$search['exterior_color_id'] =	$param['color'];			
+		}
+		if(isset($param['bodyid']) && strlen($param['bodyid']) > 0){
+			$where .=" and p.body_style_id  like :body_style_id";	
+			$search['body_style_id'] =	$param['bodyid'];			
+		}
+		if(isset($param['nseat']) && strlen($param['nseat']) > 0){
+			switch ($param['nseat']) {
+			    case 1:  $where .=" and p.num_seats between 1 and 3";break;
+				case 2:  $where .=" and p.num_seats between 4 and 6";break;
+				case 3:  $where .=" and p.num_seats between 7 and 8";break;
+				case 4:  $where .=" and p.num_seats between 9 and 16";break;
+				case 5:  $where .=" and p.num_seats >16";break;
+			}	
+		}
+		if(isset($param['drive']) && strlen($param['drive']) > 0){
+			$where .=" and p.drivetrain  = :drivetrain";	
+			$search['drivetrain'] =	$param['drive'];			
+		}
+		//$where ="";
 		$sql="select p.post_id,p.post_name,p.post_no,v.post_level,
 		(trim(p.price)+0) price,
 	pro.m_provin_name,
