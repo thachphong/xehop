@@ -26,7 +26,7 @@
 					<a href="#" class="btn2">Thành viên cao cấp</a>
 				</div>
 				<div class="col-md-6">
-					<a href="#" class="btn2">Hướng dẫn sử dụng</a>
+					<a href="p/huong-dan-su-dung" class="btn2">Hướng dẫn sử dụng</a>
 				</div>
 			</div>
 		</div>	

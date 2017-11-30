@@ -13,6 +13,7 @@
             </div>
             <div class="row dm_border margin_top">
             <form method="GET" action="{{url.get('tim')}}">
+               <input type="hidden" name="provin" value="" id="provin"/>
                <div class="row row-margin-bottom">
                   <label class="col-md-2 col-sm-2 col-xs-12 title_col_s">Tình trạng xe:</label>
                   <div class="col-md-2 col-sm-2 col-xs-12 no_padding_left" >
@@ -213,7 +214,7 @@
                         <a href="javascript:void(0)" class="show_search_advance">Tìm kiếm nâng cao</a>
                   </div>
                   <div class="col-md-6 col-sm-6 col-xs-6" style="padding-right:0px;">
-                        <button class="btn_search"><i class="fa fa-search"></i>TÌM XE</button>
+                        <button class="btn_search" id="btn_search"><i class="fa fa-search"></i>TÌM XE</button>
                   </div>
                </div>
             </form>
@@ -226,10 +227,18 @@
                <!--<span class="bg_icon" style="padding: 6px 4px 4px 2px;"><i class="fa fa-list"></i></span>
                <h1>TIN RAO MỚI</h1>-->
                <div class="row search_tab">
-                 <a href="javascript:void(0)" class="tab_title active" data="1">Toàn quốc</a>
-                 <a href="javascript:void(0)" class="tab_title" data="2">TP HCM</a>
-                 <a href="javascript:void(0)" class="tab_title" data="3">Hà Nội</a>
-                 <a href="javascript:void(0)" class="tab_title" data="4">Đà nẵng</a>
+                 <a href="javascript:void(0)" class="tab_title {%if provin==''%}active{%endif%}" data="">Toàn quốc</a>
+                 <a href="javascript:void(0)" class="tab_title {%if provin=='79'%}active{%endif%}" data="79" >TP HCM</a>
+                 <a href="javascript:void(0)" class="tab_title {%if provin=='1'%}active{%endif%}" data="1" >Hà Nội</a>
+                 <a href="javascript:void(0)" class="tab_title {%if provin=='48'%}active{%endif%}" data="48" >Đà nẵng</a>
+                 {%if provin !='' and provin !='1' and provin !='48' and provin !='79'%}
+                 	  {%for item in provin_list%}
+							{%if item.m_provin_id==provin%}
+								{%set provin_name=item.m_provin_name%}
+							{%endif%}	
+					  {%endfor%}
+                 	  <a href="javascript:void(0)" class="tab_title active" data="{{provin}}" >{{provin_name}}</a>
+                 {%endif%}
                  <div style="float: right;">
 	                 <select  id="m_provin_id">
 	                 	<option>Chọn tỉnh khác</option>
@@ -421,8 +430,15 @@ $(document).ready(function() {
     $(document).on('click','.tab_title',function(){
         $(this).parent().find('.tab_title').removeClass('active');
         $(this).addClass('active');      
-        $('#mtype').val($(this).attr('data'));      
+        $('#provin').val($(this).attr('data')); 
+        $('#btn_search').click();     
     });
+    $(document).off('change','#m_provin_id');
+    $(document).on('change','#m_provin_id',function(){        
+        $('#provin').val($(this).val()); 
+        $('#btn_search').click();
+    });
+    
 });
 function change_price(amount){
 	if(amount ==1000000) return '0' ;

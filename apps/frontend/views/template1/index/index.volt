@@ -1,3 +1,5 @@
+{{ stylesheet_link('template1/css/jquery-gentleSelect.css?ver=1.0.0') }}
+{{ javascript_include('template1/js/jquery-gentleSelect-min.js') }}
 {% set banners= elements.get_banner()%}
 <div class="row">
     <!--partial('includes/banner_left') -->
@@ -32,9 +34,17 @@
                <h1>TIN RAO MỚI</h1>-->
                <div class="row search_tab">
                  <a href="javascript:void(0)" class="tab_title active" data="1">Toàn quốc</a>
-                 <a href="javascript:void(0)" class="tab_title" data="2">TP HCM</a>
-                 <a href="javascript:void(0)" class="tab_title" data="2">Hà Nội</a>
-            	</div>
+                 <a href="tim?provin=79" class="tab_title" data="2">TP HCM</a>
+                 <a href="tim?provin=1" class="tab_title" data="2">Hà Nội</a>
+                 <div style="float: right;">
+	                 <select  id="m_provin_id">
+	                 	<option>Chọn tỉnh khác</option>
+	                 	{%for item in provin_list%}
+							<option value="{{item.m_provin_id}}">{{item.m_provin_name}}</option>	
+						{%endfor%}
+	                 </select>
+                 </div>
+               </div>
                <!--<a class="read_more" href="{{url.get('tin-moi')}}">>> Xem thêm tin rao mới</a>-->
             </div>
             <div class="new_list pn_border margin_top">
@@ -94,6 +104,16 @@
       {{ javascript_include('template1/js/jcarousellite.js') }}
 <script type="text/javascript">
 $(document).ready(function() {
+	$('#m_provin_id').gentleSelect({
+        columns: 3,
+        itemWidth: 100,
+        openEffect: "fade",
+        openSpeed: "fast"
+    }); 
+    $(document).off('change','#m_provin_id');
+    $(document).on('change','#m_provin_id',function(){        
+        location.href="{{url.get('tim?provin=')}}" + $(this).val();         
+    });
     $(document).off('click','.tab_title');
     $(document).on('click','.tab_title',function(){
         $(this).parent().find('.tab_title').removeClass('active');

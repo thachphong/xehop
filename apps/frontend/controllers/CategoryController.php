@@ -271,10 +271,11 @@ class CategoryController extends PHOController
         $s2['carsta']='';
         $s2['smissi']=''; 
         $s2['fprice']='1000000';
-        $s2['tprice']='2100000000';       
-        PhoLog::debug_var('---$s2--',$param);
+        $s2['tprice']='2100000000'; 
+        $s2['provin']='';       
+        //PhoLog::debug_var('---$s2--',$param);
         $param = array_merge($s2,$param);
-        PhoLog::debug_var('---$s2--',$param);
+        //PhoLog::debug_var('---$s2--',$param);
         $param = array_merge($param,$pa_s);
         $this->ViewVAR($param);
 	}

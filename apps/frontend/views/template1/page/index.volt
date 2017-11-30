@@ -1,7 +1,7 @@
 {{ stylesheet_link('froala/css/froala_style.css')}}
 <div class="row">
-	{% set banners= elements.get_banner()%}
-   {{ partial('includes/banner_left') }}
+	 <!--set banners= elements.get_banner()
+    partial('includes/banner_left') -->
    <div class="container">
    
       <div class="col-md-8 col-sm-12 col-xs-12 margin_top no_padding_left">
@@ -16,7 +16,7 @@
                   <div class="fr-element fr-view">
                      {{page.content}}
                   </div>
-                  <hr class="line" />
+                  <!--<hr class="line" />
 		            <div class="row">
 		            	<div><label class="chiase">Chia sẻ:</label></div>
 		            	<ul class="mxh">
@@ -31,14 +31,14 @@
 		            		<li><a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to&su={{page.page_name}}&body={{url.get('p/')}}{{page.page_no}}&ui=2&tf=1" target="_blank"><img src="{{url.get('template1/images/email.png')}}" class="email"/></a>
             		</li>
 		            	</ul>
-		            </div>
+		            </div>-->
                </div>
                
             </div>
          </div>
       </div>
-      {{ partial('includes/right2') }}
+      {{ partial('includes/right') }}
    </div>
-   {% set banners= elements.get_banner()%}
-   {{ partial('includes/banner_right_2') }}
+    <!--set banners= elements.get_banner()
+    partial('includes/banner_right_2')--> 
 </div>

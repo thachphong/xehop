@@ -74,7 +74,7 @@ class PHOController extends Controller
     {
         $auth = $this->session->get('auth');
         if(isset($auth->user_id)==FALSE || $auth->level != 1 ){
-            return $this->response->redirect('loginadm/',TRUE);
+            return $this->response->redirect(BASE_URL_NAME.'loginadm/',TRUE);
         }
     }
     public function check_login()

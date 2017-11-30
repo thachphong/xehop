@@ -420,11 +420,8 @@ class Posts extends DBModel
 				";
 		return $this->query_first($sql,array('post_id'=>$post_id));
 	}
-	public function search_posts($param,$start_row=0){
-		$limit = PAGE_LIMIT_RECORD;
+	public function set_condition($param,&$search){
 		$where ="";
-		$search = array();
-
 		if(isset($param['makeid']) && strlen($param['makeid']) > 0){
 			$where .=" and p.make_id =:make_id";	
 			$search['make_id'] =	$param['makeid'];			
@@ -486,6 +483,17 @@ class Posts extends DBModel
 			$where .=" and p.drivetrain  = :drivetrain";	
 			$search['drivetrain'] =	$param['drive'];			
 		}
+		if(isset($param['provin']) && strlen($param['provin']) > 0){
+			$where .=" and p.m_provin_id  = :m_provin_id";	
+			$search['m_provin_id'] =	$param['provin'];			
+		}
+		return $where;
+	}
+	public function search_posts($param,$start_row=0){
+		$limit = PAGE_LIMIT_RECORD;
+		
+		$search = array();
+		$where =$this->set_condition($param,$search);
 		//$where ="";
 		$sql="select p.post_id,p.post_name,p.post_no,v.post_level,
 		(trim(p.price)+0) price,
@@ -524,98 +532,23 @@ class Posts extends DBModel
 				OFFSET $start_row
 				";
 		//PhoLog::debug_var('--search----',$param);
-		PhoLog::debug_var('--search----',$sql);
-		PhoLog::debug_var('--search----',$search);
+		//PhoLog::debug_var('--search----',$sql);
+		//PhoLog::debug_var('--search----',$search);
 		return $this->pho_query($sql,$search);
 	}
 	public function search_posts_count($param){
-		$limit = PAGE_LIMIT_RECORD;
-		$where ="";
 		$search = array();
-
-		if(isset($param['ctgid']) && strlen($param['ctgid']) > 0){
-			$where .=" and p.ctg_id =:ctg_id";	
-			$search['ctg_id'] =	$param['ctgid'];			
-		}
-		if(isset($param['provin']) && strlen($param['provin']) > 0){
-			$where .=" and p.m_provin_id =:m_provin_id";	
-			$search['m_provin_id'] =	$param['provin'];			
-		}
-		if(isset($param['district']) && strlen($param['district']) > 0){
-			$where .=" and p.m_district_id =:m_district_id";	
-			$search['m_district_id'] =	$param['district'];			
-		}
-		if(isset($param['ward']) && strlen($param['ward']) > 0){
-			$where .=" and p.m_ward_id =:m_ward_id";	
-			$search['m_ward_id'] =	$param['ward'];			
-		}
-		if(isset($param['street']) && strlen($param['street']) > 0){
-			$where .=" and p.m_street_id =:m_street_id";	
-			$search['m_street_id'] =	$param['street'];			
-		}
-		if(isset($param['roomnum']) && strlen($param['roomnum']) > 0){
-			$where .=" and p.room_num  > :room_num";	
-			$search['room_num'] =	$param['roomnum'];			
-		}
-		if(isset($param['directional']) && strlen($param['directional']) > 0){
-			$where .=" and p.m_directional_id  = :m_directional_id";	
-			$search['m_directional_id'] =	$param['directional'];			
-		}
-		if(isset($param['address_ascii']) && strlen($param['address_ascii']) > 0){
-			$where .=" and p.address_ascii  like :address_ascii";	
-			$search['address_ascii'] =	'%'.str_replace(' ','%',$param['address_ascii']).'%';						
-		}
-		
-		if(isset($param['acreage']) && $param['acreage']> 0){
-			switch ($param['acreage']) {
-			    case 1:  $where .=" and p.acreage <=30";break;
-				case 2:  $where .=" and p.acreage between 30 and 50";break;
-				case 3:  $where .=" and p.acreage between 50 and 80";break;
-				case 4:  $where .=" and p.acreage between 80 and 100";break;
-				case 5:  $where .=" and p.acreage between 100 and 150";break;
-				case 6:  $where .=" and p.acreage between 150 and 200";break;
-				case 7:  $where .=" and p.acreage between 200 and 250";break;
-				case 8:  $where .=" and p.acreage between 250 and 300";break;
-				case 9:  $where .=" and p.acreage between 300 and 500";break;
-				case 10: $where .=" and p.acreage > 500";break;   
-			}						
-		}
-		
-		if(isset($param['price']) && $param['price']> 0){
-			switch ($param['price']) {
-			    case 2:  $where .=" and p.price <=500 and p.unit_price = 2";break;
-				case 3:  $where .=" and p.price between 500 and 800 and p.unit_price = 2";break;
-				case 4:  $where .=" and p.price between 800 and 1000 and p.unit_price = 2";break;
-				case 5:  $where .=" and p.price between 1 and 2 and p.unit_price = 3";break;
-				case 6:  $where .=" and p.price between 2 and 3 and p.unit_price = 3";break;
-				case 7:  $where .=" and p.price between 5 and 7 and p.unit_price = 3";break;
-				case 8:  $where .=" and p.price between 7 and 10 and p.unit_price = 3";break;
-				case 9:  $where .=" and p.price between 10 and 20 and p.unit_price = 3";break;
-				case 10:  $where .=" and p.price between 20 and 30 and p.unit_price = 3";break;
-				case 11:  $where .=" and p.price >30 and p.unit_price = 3";break;
-				case 12:  $where .=" and p.price between 1 and 2 and p.unit_price = 3";break;
-				//case 13:  $where .=" and p.price between 1 and 2 and p.unit_price = 3";break;
-				case 14:  $where .=" and p.price <1000 and p.unit_price = 10";break;
-				case 15:  $where .=" and p.price between 1 and 3 and p.unit_price = 10";break;
-				case 16:  $where .=" and p.price between 3 and 5 and p.unit_price = 10";break;
-				case 17:  $where .=" and p.price between 5 and 10 and p.unit_price = 10";break;
-				case 18:  $where .=" and p.price between 10 and 40 and p.unit_price = 10";break;
-				case 19:  $where .=" and p.price between 40 and 70 and p.unit_price = 10";break;
-				case 20:  $where .=" and p.price between 70 and 100 and p.unit_price = 10";break;
-				case 21:  $where .=" and p.price > 100 and p.unit_price = 10";break;
-
-			}						
-		}
-		$where="";
+		$where =$this->set_condition($param,$search);
 		$sql="select count(p.post_id) cnt
-				from posts p
-				INNER JOIN m_provincial pro on pro.m_provin_id = p.m_provin_id				
+				from posts p			
 				INNER JOIN posts_view v on v.post_id = p.post_id
 				LEFT JOIN posts_img im on im.post_id = p.post_id and im.avata_flg = 1
 				where p.del_flg = 0
 				and p.status =1
 				and v.hide_flg = 0
-				$where	
+				and v.end_date >= NOW()
+				and v.start_date <= now()				
+				$where		
 				";
 		//PhoLog::debug_var('--search----',$sql);
 		//PhoLog::debug_var('--search----',$search);

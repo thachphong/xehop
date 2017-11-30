@@ -287,13 +287,13 @@ class Elements extends Component
                 if($item['child_flg'] > 0){
 	                $menu_data .="<li class='has-sub'>";
                                      
-                    $menu_data .='<a href="'.$base_url.'oto/'.$item['ctg_no'].'">'.$item['ctg_name'].'</a><ul>';                            
+                    $menu_data .='<a href="'.$base_url.'tim?makeid='.$item['ctg_id'].'">'.$item['ctg_name'].'</a><ul>';                            
                     foreach($item['child'] as $sub1){ 
-                        $menu_data .='<li><a href="'.$base_url.'oto/'.$sub1['ctg_no'].'">'.$sub1['ctg_name'].'</a></li>';
+                        $menu_data .='<li><a href="'.$base_url.'tim?makeid='.$item['ctg_id'].'&modid='.$sub1['ctg_id'].'">'.$sub1['ctg_name'].'</a></li>';
                     }               
                     $menu_data .='</ul></li>';
                 }else{                   
-					$menu_data .='<li><a href="'.$base_url.'oto/'.$item['ctg_no'].'">'.$item['ctg_name'].'</a></li>';					 
+					$menu_data .='<li><a href="'.$base_url.'tim?makeid='.$item['ctg_id'].'">'.$item['ctg_name'].'</a></li>';					 
                 }        
 	        }
 		    // Store it in the cache
