@@ -50,6 +50,7 @@ class Posts extends DBModel
 	}
 	public function get_info($id){
 		$sql="select p.post_id,p.post_name,p.post_no, v.post_level,v.total_day post_date_num ,post_view_id
+				,DATE_FORMAT(v.start_date ,'%d/%m/%Y')  start_date
 				from posts p
 				INNER JOIN posts_view v on v.post_id = p.post_id
 				where p.post_id = :post_id

@@ -55,7 +55,7 @@ class Elements extends Component
                         }else if($item['page_flg']==3){
                             $href .= 'dm/';
                         }else if($item['page_flg']==4){
-                            $href .= 'la/';
+                            //$href .= 'la/';
                         }
                          $href .=$item['link'];
                     }else{
@@ -76,7 +76,7 @@ class Elements extends Component
                                 }else if ($sub1['page_flg']==3){
                                     $href .= 'dm/';
                                 }else if ($sub1['page_flg']==4){
-                                    $href .= 'la/';
+                                    //$href .= 'la/';
                                 }
                                  $href .=$sub1['link'];
                             }else{
@@ -112,7 +112,7 @@ class Elements extends Component
                                 }else if ($sub1['page_flg']==3){
                                     $href .= 'dm/';
                                 }else if ($sub1['page_flg']==4){
-                                    $href .= 'la/';
+                                    //$href .= 'la/';
                                 }
                                  $href .=$sub1['link'];
                             }else{
@@ -132,7 +132,7 @@ class Elements extends Component
                         }else if ($item['page_flg']==3){
                             $href .= 'dm/';
                         }else if ($item['page_flg']==4){
-                            $href .= 'la/';
+                            //$href .= 'la/';
                         }
                         $href .=$item['link'];
                     }else{

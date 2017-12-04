@@ -61,7 +61,8 @@ class Menu extends DBModel
     }
     public function get_menu_list($level,$position=0)
     {
-        return $this->pho_query("select m.menu_id,m.parent_id, m.menu_name,m.menu_level,m.del_flg,m.sort,m1.menu_name menu_name_1, m2.menu_name menu_name_2
+        return $this->pho_query("select m.menu_id,m.parent_id, m.menu_name,m.menu_level,m.del_flg,m.sort,
+        m1.menu_name menu_name_1, m2.menu_name menu_name_2
                 from menu m
                 LEFT JOIN menu m1 on m1.menu_id = m.parent_id 
                 LEFT JOIN menu m2 on m2.menu_id = m1.parent_id
@@ -71,8 +72,8 @@ class Menu extends DBModel
     } 
     public function get_menu_list_info($level,$position=0)
     {
-        return $this->pho_query("select m.menu_id,m.parent_id, m.menu_name,m.menu_level,m.del_flg,m.sort,m1.menu_name menu_name_1, m2.menu_name menu_name_2,
-( case m.page_flg when 1 then 'Trang' when 2 then 'Danh mục' when 3 then 'Tin tức' when 4 then 'Dự án' end) type,
+        return $this->pho_query("select m.menu_id,m.parent_id, m.menu_name,m.menu_level,m.del_flg,m.sort,m1.menu_name menu_name_1, m2.menu_name menu_name_2,m.link,m.page_flg,
+( case m.page_flg when 1 then 'Trang' when 2 then 'Danh mục' when 3 then 'Tin tức' when 4 then 'Khác' end) type,
 (case m.page_flg when 1 then p.page_name else c.ctg_name end ) dm_name
                 from menu m
                 LEFT JOIN menu m1 on m1.menu_id = m.parent_id 

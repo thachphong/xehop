@@ -7,22 +7,10 @@
 					<h1>Quản lý tin đăng bán xe </h1>
 			</div>
 			<div class="row margin_top pn_background pn_border post_pn" >
-				<form enctype="multipart/form-data" id="from_post" action="{{url.get('tin-da-dang')}}" method="get">						
-						<div class="row row-margin-bottom">							
-							<!--<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
-								<label class="select_icon">
-									<select name="plevel" id="plevel" >
-										<option value="">--Loại tin--</option>
-										<option value="3" {%if plevel == '3'%}selected{%endif%}>Tin siêu vip</option>
-										<option value="2" {%if plevel == '2'%}selected{%endif%}>Tin vip</option>
-										<option value="1" {%if plevel == '1'%}selected{%endif%}>Tin hot</option>
-										<option value="0" {%if plevel == '0'%}selected{%endif%}>Tin thường</option>
-										
-									</select>
-								</label>
-							</div>-->
+				<form enctype="multipart/form-data" id="from_post" action="{{url.get('tin-mua')}}" method="get">						
+						<div class="row row-margin-bottom">
 							<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
-								<input  type="text" name="postno" value="{{postno}}" id="postno" placeholder="Mã tin">
+								<input  type="text" name="buyno" value="{{buyno}}" id="buyno" placeholder="Mã tin">
 							</div>
 							<div class="col-md-3 col-sm-3 col-xs-12 no_padding_left">
 								<input name="fdate" class="datetimepicker datepost" placeholder="Từ ngày" value="{{fdate}}"/>
@@ -37,7 +25,6 @@
 										<option value="0" {%if status == '0'%}selected{%endif%}>Tin chờ duyệt</option>
 										<option value="1" {%if status == '1'%}selected{%endif%}>Tin đã duyệt</option>
 										<option value="2" {%if status == '2'%}selected{%endif%}>Tin không duyệt</option>
-										<option value="4" {%if status == '4'%}selected{%endif%}>Tin hết hạn</option>
 									</select>
 								</label>
 							</div>
@@ -66,22 +53,14 @@
 							</tr>
 							{%for item in list%}
 							<tr>
-								<td>{{item['post_id']}}</td>
-								<td>{{item['post_name']}}</td>
-								{%if item['end_flg'] =='1'%}
-									<td>Hết hạn</td>
-								{%else%}
-									<td>{{item['status']}}</td>
-								{%endif%}
-								<td>{{item['start_date']}}</td>								
-								{%if item['end_flg'] =='1'%}
-									<td style="width: 68px;"><a href="{{url.get('posts/increase/')}}{{item['post_id']}}" class="btn_blue">Gia hạn</a></td>
-								{%else%}
-									<td><a href="{{url.get('dang-tin/')}}{{item['post_id']}}" class="btn_blue">Sửa</a></td>
-								{%endif%}
-								<td><a href="{{url.get('posts/delete/')}}{{item['post_id']}}" class="btn_red_small">Xóa</a></td>
+								<td>{{item['buy_id']}}</td>
+								<td>{{item['buy_name']}}</td>
+								<td>{{item['status']}}</td>
+								<td>{{item['add_date']}}</td>								
+								<td><a href="{{url.get('dang-tin-mua-xe/')}}{{item['buy_id']}}" class="btn_blue">Sửa</a></td>
+								<td><a href="{{url.get('b/delete/')}}{{item['buy_id']}}" class="btn_red_small">Xóa</a></td>
 							</tr>
-							{%endfor%}							
+							{%endfor%}						
 						</table>
 						</div>
 					</div>

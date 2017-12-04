@@ -16,37 +16,28 @@
 							<tbody>
 						      <tr>
 						        <td>Mã đăng tin</td>
-						        <td>{{post['post_id']}}</td>						       
+						        <td>{{buy_id}}</td>						       
 						      </tr>
 						      <tr>
 						        <td>Tiêu đề</td>
-						        <td>{{post['post_name']}}</td>						       
-						      </tr>
-						      <!--<tr>
-						        <td>Loại Tin</td>
-						        <td>
-						        	{%if post['post_level'] == 0%}Tin thường
-						        	{%elseif post['post_level'] == 1%}Tin hot
-						        	{%elseif post['post_level'] == 2%}Tin vip
-						        	{%elseif post['post_level'] == 3%}Tin siêu vip
-						        	{%endif%}
+						        <td>{{buy_name}}
 						        </td>						        
-						      </tr>-->
+						      </tr>						      
+						      <tr>
+						        <td>Phân hạng mức tiền</td>
+						        <td>{{price_range}}</td>						        
+						      </tr>
 						      <tr>
 						        <td>Ngày đăng tin</td>
-						        <td>{{post['start_date']}} ngày</td>						        
-						      </tr>
-						      <tr>
-						        <td>Link xem tin</td>
-						        <td><a href="{{url.get('b/')}}{{post['post_no']}}_{{post['post_id']}}" target="_blank">{{url.get('b/')}}{{post['post_no']}}_{{post['post_id']}}</a></td>						        
+						        <td>{{add_date}}</td>						        
 						      </tr>
 						    </tbody>
 						</table>
 					</div>
 					<div class="row" style="text-align: center;">
 						<a class="btn_dangtin" href="{{url.get('')}}">Trở lại trang chủ</a>
-						<a class="btn_dangtin" href="{{url.get('tin-da-dang')}}">Quản lý tin đăng</a>
-						<a class="btn_dangtin" href="{{url.get('dang-tin/0')}}">Tiếp tục đăng tin</a>						
+						<a class="btn_dangtin" href="{{url.get('tin-mua')}}">Quản lý tin đăng</a>
+						<a class="btn_dangtin" href="{{url.get('dang-tin-mua-xe/0')}}">Tiếp tục đăng tin</a>						
 					</div>
 				</div>
 			</div>

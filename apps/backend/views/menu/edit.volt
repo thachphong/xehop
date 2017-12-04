@@ -52,13 +52,13 @@
                              <option value="2" {%if page_flg == 2%}selected="selected"{%endif%}>Danh mục sản phẩm</option>
                              <option value="1" {%if page_flg == 1%}selected="selected"{%endif%}>Trang</option>
                              <option value="3" {%if page_flg == 3%}selected="selected"{%endif%}>Tin tức</option>
-                             <option value="4" {%if page_flg == 4%}selected="selected"{%endif%}>Dự án</option>
+                             <option value="4" {%if page_flg == 4%}selected="selected"{%endif%}>khác</option>
                           </select>                          
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Trang/Danh mục</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="col-md-6 col-sm-6 col-xs-12" id="div_link">
                           <select class="form-control select2" name="link" id="menu_link">                             
                           </select>                          
                         </div>
@@ -95,7 +95,7 @@
   var ctg_list =JSON.parse( "{{ctg_list}}");
   var page_list =JSON.parse( "{{page_list}}");
   var news_list =JSON.parse( "{{news_list}}");
-  var project_list =JSON.parse( "{{project_list}}");
+  //var project_list =JSON.parse( "{{project_list}}");
   var link_val ="{{link}}";
   var list_level2= '{%if parent_list2 is defined%}{{parent_list2}}{%endif%}';
   if(list_level2.length > 0){
@@ -138,7 +138,9 @@
     $('#parent_id_2').append(str_op);
   };
   function change_option(val,v_link_val=''){          
-          $("#menu_link").empty();
+          //$("#menu_link").empty();
+          var obj_sel ='<select class="form-control select2" name="link" id="menu_link"></select>';
+          var obj_txt ='<input type="text" name="link" id="menu_link" class="form-control">';
           var str_opt ="";
           //console.log(val);
           if(val == "2"){
@@ -158,7 +160,10 @@
                 str_opt += '<option '+grpclass+' value="'+value.ctg_no+'">'+space+value.ctg_name + "</option>";
               }         
           
-        });
+        	});
+        	  $('#div_link').empty();
+              $('#div_link').append(obj_sel);
+              $("#menu_link").append(str_opt);
           }else if(val == 1){
             //console.log(v_link_val);
             $.each( page_list, function( key, value ) {
@@ -172,6 +177,9 @@
               }         
           
         	});
+        	 $('#div_link').empty();
+             $('#div_link').append(obj_sel);
+             $("#menu_link").append(str_opt);
           }else if(val == 3){
             $.each( news_list, function( key, value ) {             
               if(v_link_val.length > 0 && value.ctg_no == v_link_val){
@@ -182,18 +190,15 @@
               }         
           
         	});
+        	 $('#div_link').empty();
+             $('#div_link').append(obj_sel);
+             $("#menu_link").append(str_opt);
           }else if(val == 4){
-            $.each( project_list, function( key, value ) {             
-              if(v_link_val.length > 0 && value.ctg_no == v_link_val){
-                //console.log(v_link_val);
-                str_opt += '<option value="'+value.ctg_no+'" selected="selected">'+value.ctg_name + "</option>";
-              }else{
-                str_opt += '<option value="'+value.ctg_no+'">'+value.ctg_name + "</option>";
-              }         
-          
-        	});
+             $('#div_link').empty();
+             $('#div_link').append(obj_txt);
+              $("#menu_link").val(v_link_val);
           }
-          $("#menu_link").append(str_opt);
+          
           
           
             //console.log(v_link_val);

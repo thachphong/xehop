@@ -18,9 +18,9 @@
 	        <li><a href="{{url.get('thanh-vien/thongtin')}}"><i class="fa-angle-double-right"></i><span>Thay đổi thông tin cá nhân</span></a></li>
 	        <li><a href="{{url.get('thanh-vien/pass')}}"><i class="fa-angle-double-right"></i>Thay đổi mật khẩu</a></li>
 	        <li><a href="{{url.get('dang-tin/0')}}"><i class="fa-angle-double-right"></i>Đăng tin bán xe</a></li>
-	        <li><a href="{{url.get('nap-tien')}}"><i class="fa-angle-double-right"></i>Đăng tin mua xe</a></li>
-	        <li><a href="{{url.get('tin-da-dang')}}"><i class="fa-angle-double-right"></i>Quản lý tin đã đăng</a></li>
-	        
+	        <li><a href="{{url.get('dang-tin-mua-xe/0')}}"><i class="fa-angle-double-right"></i>Đăng tin mua xe</a></li>
+	        <li><a href="{{url.get('tin-da-dang')}}"><i class="fa-angle-double-right"></i>Quản lý tin đăng bán xe</a></li>
+	        <li><a href="{{url.get('tin-mua')}}"><i class="fa-angle-double-right"></i>Quản lý tin đăng mua xe</a></li>
 	    </ul>
 	    </div>
     </div>

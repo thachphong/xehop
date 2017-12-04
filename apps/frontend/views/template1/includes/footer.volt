@@ -23,7 +23,7 @@
                <p><strong style="color:#015f95;">XẾ HỘP.NET.VN</strong></p>
               <!-- <p><strong style="color:#589b04;;">Địa chỉ:</strong> Tầng 7, tòa nhà BIGOFFICE 152  Vũ Phạm Hàm , Phường Yên Hòa , Quận Cầu Giấy, Hà Nội</p>-->
                <p><strong style="color:#589b04;">Hotline:</strong> 0981 111 222</p>
-               <p><strong style="color:#589b04;">Email:</strong> xehop.net.vn@gmail.com</p>
+               <p><strong style="color:#589b04;">Email:</strong> xehophcm@gmail.com</p>
             </div>
             <div class="col-md-6 col-sm-6 col-xs-12" id="footer_col_2">
                 <!--<div><img src="{{url.get('template1/images/dang_ky_bct.png')}}"> </div>-->

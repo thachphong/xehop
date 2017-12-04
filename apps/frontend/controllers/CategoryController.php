@@ -256,7 +256,7 @@ class CategoryController extends PHOController
             $pa_s['drivetrain_list'] = Mdrivetrain::get_all();            
             $pa_s['current_year'] = date('Y') +1;     
             $ndb = new News();      
-            $cache->save($cacheKey,$result);
+            $cache->save($cacheKey,$pa_s);
         }
         $s2['fyear']='';
         $s2['tyear']='';
