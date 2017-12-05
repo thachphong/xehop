@@ -163,9 +163,9 @@
 							<label class="col-md-5 col-sm-5 col-xs-12 title_col">Giá tiền<span class="lab_red">(*)</span>:</label>
 							<div class="col-md-7 col-sm-7 col-xs-12 no_padding">
 								<input type="text" class="number_format" name="price" id="price" value="{{price}}" style="width:58%">
-								<div class="donvi_tinh">
-									<label><input type="radio" name="unit_price[]" value="1" {%if unit_price==1%}checked{%endif%} style="width: 20px;">Triệu đồng</label>
-									<label><input type="radio" name="unit_price[]" value="2" {%if unit_price==2%}checked{%endif%} style="width: 20px;">USD</label>
+								<div class="donvi_tinh" style="vertical-align: center">
+									<label><input type="hidden" name="unit_price" value="1">Triệu đồng</label>
+									<!--<label><input type="radio" name="unit_price[]" value="2" {%if unit_price==2%}checked{%endif%} style="width: 20px;">USD</label>-->
 								</div>
 								<label class="lab_red lab_invisible" id="price_error">Bạn cần nhập giá tiền !</label>
 							</div>

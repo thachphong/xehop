@@ -25,10 +25,8 @@
                 <div class="x_panel">
                   <div class="x_title">
                     <h2>Danh sách {{title}}<!--<small>Users</small>--></h2>
-                    <ul class="nav navbar-rigth panel_toolbox" style="min-width: auto;">
-                      {%if banner_flg==0%}
-                      <li><button class="btn btn-primary" id="btn_new">Thêm mới</button></li>
-                      {%endif%}
+                    <ul class="nav navbar-rigth panel_toolbox" style="min-width: auto;">                      
+                      <li><button class="btn btn-primary" id="btn_new">Thêm mới</button></li>                      
                      <!-- <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>-->
                       <!--<li class="dropdown">
@@ -64,7 +62,8 @@
                       <thead>
                         <tr>
                           <th>STT</th>                         
-                          <th>Ảnh</th> 
+                          <th>Ảnh</th>
+                          <th>Vị trí</th>
                           <th>Link đến trang</th>                       
                           <th>Hiện</th>
                           <th>Sửa</th> 
@@ -82,6 +81,12 @@
                           <td>
                           	<img id="img_disp" class="img-rounded" src="{{url.get('')}}{{item.img_path}}" width="220" height="100"/>
                           </td> 
+                         
+                          	<th>{%if item.position=='1'%}Phía trên
+                          		{%elseif item.position=='2'%}Phía dưới
+                          		{%elseif item.position=='3'%}Bên trái 
+                          		{%elseif item.position=='4'%}Bên phải
+                          		{%endif%}</th>                          
                           <td>{{item.link_page}}</td>                        
                           <td>
                           	

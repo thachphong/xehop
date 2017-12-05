@@ -102,7 +102,9 @@ class VbuyController extends PHOController
 	        PhoLog::debug_var('---$s2--',__LINE__);
 	        $s2['fyear']='';
 	        $s2['tyear']='';       
-	        $s2['provin']='';       
+	        $s2['provin']='';
+	        $s2['pricerange']='';    
+	             
 	        //PhoLog::debug_var('---$s2--',$param);
 	        $param = array_merge($s2,$param);
 	        //PhoLog::debug_var('---$s2--',$param);

@@ -50,6 +50,24 @@ class Buy extends DBModel
 		$sql ="select * from buy where buy_id = :buy_id";
 		return $this->query_first($sql,array('buy_id'=>$id));
 	}
+	public function get_top_rows($limit=5){
+		$sql="select buy_id,buy_no,buy_name,content,
+				(case price_range when 1 then 'Dưới 200 triệu'
+									when 2 then 'Từ 200-400 triệu'
+									when 3 then 'Từ 400-600 triệu'
+									when 4 then 'Từ 600-800 triệu'
+									when 5 then 'Từ 800 triệu - 1tỉ'
+									when 6 then 'Trên 1tỉ' end) price_range
+					,DATE_FORMAT(b.add_date ,'%d/%m/%Y')  add_date
+					,p.m_provin_name
+				from buy b
+				INNER JOIN user u on u.user_id = b.add_user
+				LEFT JOIN m_provincial p on p.m_provin_id = u.city
+				where b.del_flg = 0 
+				order by b.buy_id desc
+				limit  $limit";
+		return $this->pho_query($sql);
+	}
 	public function get_info($id){
 		$sql="select buy_id,buy_no,buy_name,
 				(case price_range when 1 then 'Dưới 200 triệu'
@@ -170,7 +188,12 @@ class Buy extends DBModel
 		if(isset($param['provin']) && strlen($param['provin'])>0 ){
 			$sql .=" and u.city = :provin";
 			$search['provin'] = $param['provin'];
-		}			
+		}
+		if(isset($param['pricerange']) && strlen($param['pricerange'])>0 ){
+			$sql .=" and b.price_range = :pricerange";
+			$search['pricerange'] = $param['pricerange'];
+		}		
+				
 		if(isset($param['fdate']) && strlen($param['fdate'])>0 && isset($param['tdate']) && strlen($param['tdate'])>0){
 			$sql .=" and add_date between STR_TO_DATE(:fdate,'%d/%m/%Y') and STR_TO_DATE(:tdate,'%d/%m/%Y')";
 			$search['fdate'] = $param['fdate'];

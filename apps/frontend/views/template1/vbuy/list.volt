@@ -4,7 +4,7 @@
 {{ javascript_include('template1/js/jquery-ui.js') }}
 <div class="row">
    <div class="container" id="content">            
-      <div class="col-md-8 col-sm-12 col-xs-12 margin_top">
+      <div class="col-md-8 col-sm-12 col-xs-12 margin_top no_padding_left">
          <div class="row margin_top" >
             <div class="pn_title">
                <span class="bg_icon" style="padding: 6px 4px 4px 2px;"><i class="fa fa-list"></i></span>
@@ -15,7 +15,7 @@
          <div class="pn_title margin_top">
                <!--<span class="bg_icon" style="padding: 6px 4px 4px 2px;"><i class="fa fa-list"></i></span>
                <h1>TIN RAO MỚI</h1>-->
-               <div class="row search_tab">
+               <div class="row search_tab" fieldname="provin">
                  <a href="javascript:void(0)" class="tab_title {%if provin==''%}active{%endif%}" data="">Toàn quốc</a>
                  <a href="javascript:void(0)" class="tab_title {%if provin=='79'%}active{%endif%}" data="79" >TP HCM</a>
                  <a href="javascript:void(0)" class="tab_title {%if provin=='1'%}active{%endif%}" data="1" >Hà Nội</a>
@@ -31,6 +31,7 @@
                  <div style="float: right;">
                  	<form action="tin-mua-xe" method="get" id="form_search">
                  		<input  type="hidden" name="provin" id="provin" value="{{provin}}"/>
+                 		<input  type="hidden" name="pricerange" id="pricerange" value="{{pricerange}}"/>
 	                 <select  id="m_provin_id">
 	                 	<option>Chọn tỉnh khác</option>
 	                 	{%for item in provin_list%}
@@ -42,11 +43,14 @@
                </div>               
          </div>
          <div class="search_border margin_top">
-         	<div class="row search_tab">
-                 <a href="javascript:void(0)" class="tab_title {%if provin==''%}active{%endif%}" data="">Tất cả</a>
-                 <a href="javascript:void(0)" class="tab_title {%if provin=='79'%}active{%endif%}" data="79" >Dưới 200 triệu</a>
-                 <a href="javascript:void(0)" class="tab_title {%if provin=='1'%}active{%endif%}" data="1" >200-400 triệu</a>
-                 <a href="javascript:void(0)" class="tab_title {%if provin=='48'%}active{%endif%}" data="48" >400-600 triệu</a>               		  </div>
+         	<div class="row search_tab" fieldname="pricerange" id="div_price_range">
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange==''%}active{%endif%}" data="">Tất cả</a>
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange=='1'%}active{%endif%}" data="1" >Dưới 200triệu</a>
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange=='2'%}active{%endif%}" data="2" >200-400triệu</a>
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange=='3'%}active{%endif%}" data="3" >400-600triệu</a>
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange=='4'%}active{%endif%}" data="4" >600-800triệu</a>.
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange=='5'%}active{%endif%}" data="5" >800-1tỉ</a>
+                 <a href="javascript:void(0)" class="tab_title {%if pricerange=='6'%}active{%endif%}" data="6" >Trên 1tỉ</a>                		  </div>
          </div>
          <div class="new_list pn_border margin_top">         	
                {%for item in list%}
@@ -115,8 +119,9 @@ $(document).ready(function() {
    $(document).off('click','.tab_title');
     $(document).on('click','.tab_title',function(){
         $(this).parent().find('.tab_title').removeClass('active');
-        $(this).addClass('active');      
-        $('#provin').val($(this).attr('data')); 
+        $(this).addClass('active');  
+        var  fieldname=  $(this).parent().attr('fieldname');   
+        $('#'+fieldname).val($(this).attr('data')); 
         $('#form_search').submit();    
     });
     $(document).off('change','#m_provin_id');

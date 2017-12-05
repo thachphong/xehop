@@ -40,6 +40,17 @@
                         <input type="hidden"  name="folder_tmp" value="{{folder_tmp}}" >
                       </div>
                       <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Vị trí</label>
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+                        	<select class="form-control" name="position">                        	 
+                          	 <option value="1" {%if data.position == '1'%}selected="selected"{%endif%}>Phía trên</option>
+                          	 <option value="2" {%if data.position == '2'%}selected="selected"{%endif%}>Phía dưới</option>
+                          	 <option value="3" {%if data.position == '3'%}selected="selected"{%endif%}>Bên trái</option>
+                          	 <option value="4" {%if data.position == '4'%}selected="selected"{%endif%}>Bên phải</option>
+                           </select>                          
+                        </div>
+                      </div>
+                      <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Link đến trang</label>
                         <div class="col-md-8 col-sm-8 col-xs-12">
                           <input type="text"  class="form-control" name="link_page" value="{{data.link_page}}">

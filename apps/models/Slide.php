@@ -17,6 +17,7 @@ class Slide extends DBModel
     public $upd_user;
     public $link_page;
     public $banner_flg;
+    public $position;
     public function initialize()
     {
         $this->setSource("slides");
@@ -39,10 +40,10 @@ class Slide extends DBModel
             'bind' => array('banner_flg' => $banner_flg)
         ));
 	}
-	public function get_slides_list($banner_flg= 0)
+	public function get_slides_list($banner_flg= 0,$position = 0)
 	{		
-		return Slide::find(array("banner_flg = :banner_flg: and del_flg =0",
-            'bind' => array('banner_flg' => $banner_flg)
+		return Slide::find(array("banner_flg = :banner_flg: and del_flg =0 and position=:position: ",
+            'bind' => array('banner_flg' => $banner_flg,'position'=>$position)
         ));
 	}
 	public function _insert($param){
@@ -53,7 +54,14 @@ class Slide extends DBModel
 	    $this->add_user= $param['user_id'];	  
 	    $this->upd_user= $param['user_id'];
 	    $this->link_page= $param['link_page'];
-	    $this->banner_flg= $param['banner_flg'];
+	    $this->banner_flg= 0;
+	    if(strlen($param['banner_flg']) > 0){
+			$this->banner_flg= $param['banner_flg'];
+		}
+	    
+	    if(isset($param['position'])){
+			$this->position = $param['position'];
+		}
 	    $this->save();
 	}
 	public function _update($param){
@@ -62,7 +70,8 @@ class Slide extends DBModel
 					,del_flg = :del_flg	
 					,link_page= :link_page				
 					,upd_date =  now()
-					,upd_user =:user_id					
+					,upd_user =:user_id	
+					,position =:position				
 					where slide_id = :slide_id
 				";	
  
@@ -71,7 +80,8 @@ class Slide extends DBModel
 					,'img_path'					
 					,'user_id'
 					,'del_flg'	
-					,'link_page'			
+					,'link_page'
+					,'position'			
 					)));	
 	}
 }

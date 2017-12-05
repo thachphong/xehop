@@ -11,7 +11,7 @@ use Phalcon\Cache\Backend\File as BackFile;
 use Phalcon\Cache\Frontend\Data as FrontData;
 use Multiple\PHOClass\PhoLog;
 use Multiple\Models\Slide;
-use Multiple\Models\Project;
+use Multiple\Models\Buy;
 use Multiple\Models\Provincial;
 /**
  * Elements
@@ -405,31 +405,26 @@ class Elements extends Component
         }
         echo $html;
     }
-    public function getduannoibac()
+    public function gettinmuaxe()
     { 
-        $options = ['lifetime' => 600 ]; // thoi gian tinh bang giay ,10 phut
+        $options = ['lifetime' => 900 ]; // thoi gian tinh bang giay ,15 phut
         $frontendCache = new FrontData($options);   
         $cache = new BackFile( $frontendCache,  ['cacheDir' => PHO_CACHE_DIR ]);
 
-        $cacheKey = 'duannoibac.cache';
+        $cacheKey = 'gettinmuaxe.cache';
         $html  = $cache->get($cacheKey);
         if ($html === null) {
-            $ne = new Project();
-            $data = $ne->get_project_rows(12);    
+            $ne = new Buy();
+            $data = $ne->get_top_rows(5);    
             $html = '';
             foreach($data as $key=>$item){
-                $html .= '<div class="vipitem pn_background pn_border">';
-                if(strlen($item['img_path'])>0){
-                    $html .= '<img class="duan_img" src="'.BASE_URL_NAME.'crop/104x69/'.$item['img_path'].'"><div>';
-                }else{
-                    $html .= '<img class="duan_img" src="'.BASE_URL_NAME.'template1/images/post1.png"><div>';
-                }
-                
-                $html .= '<a href="'.BASE_URL_NAME.'da/'.$item['project_no'].'_'.$item['project_id'].'">'.$item['project_name'].'</a>';
-                //$html .= '<div>';
-                //$html .= '<span>'. $item['des'].'</span>';
-                //$html .= '</div></div></div>';    
-                $html .= '</div></div>';              
+            	/*if($key  != 0){
+					$html .= "<hr/ cl>"; 
+				}*/
+                $html .= '<li class="news-item">';
+                $html .= '<a href="'.BASE_URL_NAME.'tin-mua-xe">'.$item['buy_name'].' ['.$item['m_provin_name'].']</a>';
+                $html .= '<p>'.$this->substr_des($item['content']).'...</p>';
+                $html .= '</li>';                              
             }
             // Store it in the cache
             $cache->save($cacheKey, $html);
@@ -498,17 +493,17 @@ class Elements extends Component
 		//PhoLog::debug_var('---checkdata---',$cdata);		
 		return $cdata;
 	}
-	public function get_banner(){
+	public function get_banner($position=1){
 		try{
 	    	$options = ['lifetime' => 86400 ]; // thoi gian tinh bang giay ,1 ngay
 	        $frontendCache = new FrontData($options);   
 	        $cache = new BackFile( $frontendCache,  ['cacheDir' => PHO_CACHE_DIR ]);
 
-	        $cacheKey = 'banner.cache';
+	        $cacheKey = 'banner_'.$position.'.cache';
 	        $cdata  = $cache->get($cacheKey);
 	        if($cdata === NULL){
 				$model = new Slide();
-				$cdata = $model->get_slides_list(1); //1 la banner		
+				$cdata = $model->get_slides_list(1,$position); //1 la banner		
 				
 				$cache->save($cacheKey, $cdata);
 			}		

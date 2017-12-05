@@ -54,23 +54,23 @@
                       <li><a href="{{url.get('news')}}">Tin tức</a></li>                     
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-newspaper-o"></i> Dự án <span class="fa fa-chevron-down"></span></a>
+                  <!--<li><a><i class="fa fa-newspaper-o"></i> Dự án <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{url.get('category/project')}}">Loại dự án</a></li>
                       <li><a href="{{url.get('project')}}">Dự án</a></li>
                     </ul>
-                  </li>
+                  </li>-->
                   <li><a><i class="fa fa-sliders"></i> Slide - Banner <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{url.get('slide/list/0')}}">Slide</a></li>
                       <li><a href="{{url.get('slide/list/1')}}">Banner</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-sliders"></i>Thông tin đường phố<span class="fa fa-chevron-down"></span></a>
+                  <!--<li><a><i class="fa fa-sliders"></i>Thông tin đường phố<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="{{url.get('street')}}">Đường phố</a></li>
                     </ul>
-                  </li>
+                  </li>-->
                   <li><a href="{{url.get('useradm/list')}}"><i class="fa fa-group"></i> Tài khoản <span class="fa"></span></a></li>                  
                   <li><a><i class="fa fa-gear"></i> Cài đặt <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">

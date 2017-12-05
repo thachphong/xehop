@@ -1,6 +1,6 @@
 {{ stylesheet_link('template1/css/jquery-gentleSelect.css?ver=1.0.0') }}
 {{ javascript_include('template1/js/jquery-gentleSelect-min.js') }}
-{% set banners= elements.get_banner()%}
+<!-- set banners= elements.get_banner()-->
 <div class="row">
     <!--partial('includes/banner_left') -->
    <div class="container" id="content">
@@ -15,6 +15,19 @@
             	</ul>
             </div>
         </div>
+        {% set banners_left= elements.get_banner(3)%}
+        <div class="row margin_top banner">
+        	{%if banners_left[0] is defined %}
+		   		<a href="{{url.get(banners_left[0].link_page)}}">
+		   			<img src="{{url.get(banners_left[0].img_path)}}" style="margin-bottom: 5px"/>
+		   		</a>
+		    {%endif%}
+        {%if banners_left[1] is defined %}
+          <a href="{{url.get(banners_left[1].link_page)}}">
+            <img src="{{url.get(banners_left[1].img_path)}}" style="margin-bottom: 5px"/>
+          </a>
+        {%endif%}
+		</div>
    	  </div>
       <div class="col-md-6 col-sm-12 col-xs-12 margin_top no_padding">
       	 <div class="row margin_top search_border" >

@@ -121,7 +121,7 @@ class Posts extends DBModel
 			$this->mileage = $param['mileage'];
 			$this->body_style_id = $param['body_style_id'];
 			$this->price = $param['price'];
-			$this->unit_price = $param['unit_price'][0];
+			$this->unit_price = $param['unit_price'];//[0];
 			$this->exterior_color_id = $param['exterior_color_id'];
 			$this->interior_color_id = $param['interior_color_id'];
 			

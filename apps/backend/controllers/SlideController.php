@@ -22,8 +22,11 @@ class SlideController extends PHOController
 	public function editAction($slide_id)
 	{
 		//$param = $this->get_Gparam(array('slide_id'));
+		
+		$param = self::get_param(array('banner_flg'));	
 		$slide_db = new Slide();
 		if(strlen($slide_id)==0 || $slide_id ==0){  // new
+			$slide_db->banner_flg = $param['banner_flg'];
 			$result['data'] = $slide_db;
 		}else{//editG
 			$result['data'] = $slide_db->get_info($slide_id);
@@ -54,6 +57,7 @@ class SlideController extends PHOController
 			,'link_page'
 			,'banner_flg'
 			,'folder_tmp'		
+			,'position'
 			));
 		
 		$result = array('status' => 'OK');
