@@ -21,6 +21,7 @@
 	        <li><a href="{{url.get('dang-tin-mua-xe/0')}}"><i class="fa-angle-double-right"></i>Đăng tin mua xe</a></li>
 	        <li><a href="{{url.get('tin-da-dang')}}"><i class="fa-angle-double-right"></i>Quản lý tin đăng bán xe</a></li>
 	        <li><a href="{{url.get('tin-mua')}}"><i class="fa-angle-double-right"></i>Quản lý tin đăng mua xe</a></li>
+	        <li><a href="{{url.get('thanh-vien/regvip')}}"><i class="fa-angle-double-right"></i>Đăng ký thành viên VIP</a></li>
 	    </ul>
 	    </div>
     </div>

@@ -23,7 +23,7 @@
 					<a href="{{url.get('dang-tin-mua-xe/0')}}" class="btn2">Đăng tin mua xe ôtô</a>
 				</div>
 				<div class="col-md-6">
-					<a href="#" class="btn2">Thành viên cao cấp</a>
+					<a href="{{url.get('thanh-vien/regvip')}}" class="btn2">Thành viên cao cấp</a>
 				</div>
 				<div class="col-md-6">
 					<a href="p/huong-dan-su-dung" class="btn2">Hướng dẫn sử dụng</a>

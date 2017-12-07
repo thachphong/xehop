@@ -4,6 +4,7 @@ namespace Multiple\Frontend\Controllers;
 
 use Multiple\PHOClass\PHOController;
 use Multiple\Models\Users;
+use Multiple\Models\Uservip;
 use Multiple\Models\Define;
 use Multiple\Models\Provincial;
 use Multiple\Library\Mail;
@@ -159,6 +160,24 @@ class UsersController extends PHOController
 		}
 		$db->updateinfo($param);
 		$this->_registerSession($db->get_info($user->user_id));
+		return $this->ViewJSON($result);
+	}
+	public function uservipAction(){
+		try{
+			$param = $this->get_param(array('amount','num_month','level','note'));
+			PhoLog::debug_var('---Error---',$param);	
+			$result = array('status' => 'OK');
+			$result['status'] = 'OK';	
+			$result['msg'] = 'Đăng ký thành viên vip thành công!';	
+			$user = $this->session->get('auth');	
+			$db = new Uservip();
+			$param['user_id'] = $user->user_id;			
+			$db->_insert($param);
+		}catch (\Exception $e) {
+			PhoLog::debug_var('---Error---',$e);			
+			$result['msg']="Có lỗi xảy ra trong quá trình cập nhật!";
+			$result['status']='NOT';
+		}
 		return $this->ViewJSON($result);
 	}
 }

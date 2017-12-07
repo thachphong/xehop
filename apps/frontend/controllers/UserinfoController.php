@@ -37,5 +37,10 @@ class UserinfoController extends PHOController
 		$this->set_template_share();
 		$this->ViewVAR($result);
 	}
+	public function regvipAction()
+	{
+		$this->set_template_share();
+		$this->ViewVAR($result);
+	}
 	
 }
